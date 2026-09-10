@@ -178,7 +178,15 @@ Never commit your `.env` file if it contains secrets.
 
 ## ▶️ Running the Application
 
-Start the development server:
+Start both the frontend and the backend together:
+
+```bash
+npm start
+```
+
+This runs the Express API on `http://localhost:5000` and the Vite dev server on `http://localhost:5173`.
+
+A standalone frontend dev server:
 
 ```bash
 npm run dev

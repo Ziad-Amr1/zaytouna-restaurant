@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Eye, EyeOff, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -10,19 +9,16 @@ export default function PasswordInput({
   autoComplete,
   value,
   onChange,
+  onBlur,
   placeholder,
   "aria-invalid": ariaInvalid,
   "aria-describedby": ariaDescribedby,
   className,
 }) {
-  const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 
   const type = visible ? "text" : "password";
   const ToggleIcon = visible ? EyeOff : Eye;
-  const labelKey = visible
-    ? "auth.password.hide"
-    : "auth.password.show";
 
   return (
     <div className="relative">
@@ -33,6 +29,7 @@ export default function PasswordInput({
         autoComplete={autoComplete}
         value={value}
         onChange={onChange}
+        onBlur={onBlur}
         placeholder={placeholder}
         aria-invalid={ariaInvalid}
         aria-describedby={ariaDescribedby}
@@ -50,7 +47,7 @@ export default function PasswordInput({
       <button
         type="button"
         onClick={() => setVisible((v) => !v)}
-        aria-label={t(labelKey)}
+        aria-label={visible ? "Hide password" : "Show password"}
         aria-pressed={visible}
         className="absolute top-1/2 end-3 -translate-y-1/2 rounded-sm p-1 text-(--color-text-secondary) transition-colors hover:text-(--color-text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-focus-ring)"
       >

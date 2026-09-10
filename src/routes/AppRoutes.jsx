@@ -1,6 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
+import Login from "@/pages/auth/Login";
+import Registration from "@/pages/auth/Registration";
+import UnauthorizedPage from "@/pages/public/UnauthorizedPage";
+import ProtectedRoute from "@/routes/ProtectedRoute";
+import RoleGuard from "@/routes/RoleGuard";
 
 function Landing() {
   return (
@@ -28,21 +33,28 @@ function AppRoutes() {
       <Route path="/menu/:id" element={<div>Dish Details</div>} />
 
       {/* Guest Routes */}
-      <Route path="/login" element={<div>Login</div>} />
-      <Route path="/register" element={<div>Register</div>} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Registration />} />
 
       {/* Public Error Route */}
-      <Route path="/unauthorized" element={<div>Unauthorized</div>} />
+      <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
       {/* User Routes */}
-      <Route path="/profile" element={<div>Profile</div>} />
-      <Route path="/orders" element={<div>My Orders</div>} />
-      <Route path="/reservations" element={<div>My Reservations</div>} />
-      <Route path="/favorites" element={<div>Favorites</div>} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/profile" element={<div>Profile</div>} />
+        <Route path="/orders" element={<div>My Orders</div>} />
+        <Route path="/reservations" element={<div>My Reservations</div>} />
+        <Route path="/favorites" element={<div>Favorites</div>} />
 
-      {/* Admin Routes */}
-      <Route path="/admin" element={<div>Admin Dashboard</div>} />
-      <Route path="/admin/analytics" element={<div>Analytics</div>} />
+        {/* Admin Routes */}
+        <Route element={<RoleGuard allowedRoles={["admin"]} />}>
+          <Route path="/admin" element={<div>Admin Dashboard</div>} />
+          <Route path="/admin/analytics" element={<div>Analytics</div>} />
+        </Route>
+      </Route>
+
+      {/* Fallback */}
+      <Route path="*" element={<div>Not Found</div>} />
     </Routes>
   );
 }

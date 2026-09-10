@@ -53,8 +53,8 @@ zaytouna-restaurant/
 │   │   └── admin/             # Admin experience (future)
 │   ├── routes/                # Who-can-access-what lives here
 │   │   ├── AppRoutes.jsx      # Route table
-│   │   ├── ProtectedRoute.jsx # Auth gate (placeholder — no logic yet)
-│   │   └── RoleGuard.jsx      # Role gate (placeholder — no logic yet)
+│   │   ├── ProtectedRoute.jsx # Auth gate (implemented)
+│   │   └── RoleGuard.jsx      # Role gate (implemented)
 │   ├── App.jsx                # Renders AppRoutes
 │   ├── index.css              # Design system (tokens + theme)
 │   └── main.jsx               # Entry point, BrowserRouter
@@ -98,16 +98,18 @@ All four directories exist and are tracked via `.gitkeep`; they contain no page 
 ## Routing (current)
 
 - `src/routes/AppRoutes.jsx` is the single route table, rendered by `App.jsx`.
-- `ProtectedRoute.jsx` and `RoleGuard.jsx` exist as **placeholders only** — no auth/role enforcement is implemented yet.
-- `main.jsx` wraps the app in `<BrowserRouter>`.
+- `ProtectedRoute.jsx` renders `LoadingScreen` while the session restores, redirects guests to `/login` (preserving the intended destination in `state.from`), and otherwise renders the protected subtree.
+- `RoleGuard.jsx` (`allowedRoles`, e.g. `["admin"]`) redirects logged-in users with the wrong role to `/unauthorized`.
+- `main.jsx` wraps the app in `<BrowserRouter>` **and** `<AuthProvider>`.
 
-**Future rules**: wrap protected routes in `<ProtectedRoute>`; wrap admin-only routes in `<RoleGuard>`; keep the navigation logic out of page components.
+**Implemented routes:** `/` landing, `/menu`, `/menu/:id`, `/login`, `/register`, `/unauthorized`, protected `/profile`, `/orders`, `/reservations`, `/favorites`, admin `/admin`, `/admin/analytics`, `*` not-found.
+
+**Future rules**: keep new public pages under `public/`, auth pages under `auth/`, and always route user/admin pages behind the guards.
 
 ## Context Architecture (current)
 
 - `src/context/AuthContext.jsx` — React context object (default export).
-- `src/context/AuthProvider.jsx` — provides `user`, `isAuthenticated`, `isLoading`, `login`, `logout`; restores the session on mount via `getCurrentUser()`; listens for `auth:unauthorized` to clear the session.
-- AuthProvider is **not mounted in the app tree yet** (no auth flow implemented) — drop it in when Login/Register are built.
+- `src/context/AuthProvider.jsx` — mounted in `main.jsx`. Provides `user`, `isAuthenticated`, `isLoading`, `login`, `register`, `logout`; restores the session on mount via `getCurrentUser()` when a token exists; persists `token`/`user` to `localStorage` on login/register; listens for `auth:unauthorized` to clear the session. Logout is client-side only (no backend endpoint).
 - **Rule**: new global state lives in `src/context/` with a separate Provider file; consume via a hook.
 
 ## Hooks Architecture (current)
@@ -164,6 +166,8 @@ Copy `.env.example` → `.env` to override. `.env*` is gitignored; `.env.example
 
 ## Current Foundation vs. Future Work
 
-**Foundation (done):** Vite+React+JS app; Tailwind v4 design system; shadcn/ui configured; React Router + `AppRoutes` skeleton; canonical Axios layer (`axiosClient` + `authApi`/`menuApi`/`ordersApi`); Auth context/hooks scaffolding; i18n scaffolding; pages directory skeleton; lint+build green.
+**Foundation (done):** Vite+React+JS app; Tailwind v4 design system; shadcn/ui configured; React Router + `AppRoutes` skeleton; canonical Axios layer (`axiosClient` + `authApi`/`menuApi`/`ordersApi`); Auth context/hooks; i18n scaffolding; pages directory skeleton; lint+build green.
 
-**Future (not implemented):** Login/Register, authentication flow, `ProtectedRoute`/`RoleGuard` behavior, Landing/Menu pages, orders, reservations, favorites, profile, admin dashboard, analytics, CRUD screens, mounting `AuthProvider`, wiring i18n (ar/fr).
+**Auth (done):** Login/Register pages (react-hook-form + zod), session persistence + restore via `/auth/me`, auto-login on register, `ProtectedRoute`/`RoleGuard` behavior, `/unauthorized` page, 401 handling (login/register 401s are form errors; session 401s clear the session globally), `AuthProvider` mounted.
+
+**Future (not implemented):** Landing/Menu pages, orders, reservations, favorites, profile, admin dashboard, analytics, CRUD screens, wiring i18n (ar/fr), password reset / OTP (no backend endpoints exist).

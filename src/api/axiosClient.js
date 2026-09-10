@@ -20,10 +20,20 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+const AUTH_ATTEMPT_ENDPOINTS = ["/auth/login", "/auth/register"];
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const url = error.config?.url || "";
+    const isAuthAttempt = AUTH_ATTEMPT_ENDPOINTS.some((endpoint) =>
+      url.includes(endpoint)
+    );
+
+    // A 401 on a login/register attempt is a normal validation failure
+    // (bad credentials). The caller handles it and shows the message.
+    // Only session-dependent 401s should clear the session globally.
+    if (error.response?.status === 401 && !isAuthAttempt) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       window.dispatchEvent(new Event("auth:unauthorized"));
