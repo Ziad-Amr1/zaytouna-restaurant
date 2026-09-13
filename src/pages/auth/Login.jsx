@@ -54,7 +54,7 @@ function Login() {
     }
   };
 
-  if (isAuthenticated) {
+  if (isAuthenticated && !redirectTarget) {
     return <Navigate to="/" replace />;
   }
 

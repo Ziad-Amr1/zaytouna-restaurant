@@ -76,7 +76,7 @@ function Registration() {
     }
   };
 
-  if (isAuthenticated) {
+  if (isAuthenticated && !redirectTarget) {
     return <Navigate to="/" replace />;
   }
 

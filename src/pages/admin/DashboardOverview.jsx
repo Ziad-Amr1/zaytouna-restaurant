@@ -1,8 +1,9 @@
 import { useState } from "react";
-import StatCard from "@/components/common/StatCard";
+import { Calendar, DollarSign, ShoppingBag, Users } from "lucide-react";
+
 import DataTable from "@/components/common/DataTable";
+import StatCard from "@/components/common/StatCard";
 import OrderStatusBadge from "@/components/common/OrderStatusBadge";
-import { DollarSign, ShoppingBag, Calendar, Users } from "lucide-react";
 
 export default function DashboardOverview() {
   const [orders] = useState([]);
@@ -19,10 +20,10 @@ export default function DashboardOverview() {
     { header: "Dishes Ordered", accessor: "items" },
     { header: "Total", accessor: "total" },
     { header: "Time", accessor: "time" },
-    { 
-      header: "Status", 
-      accessor: "status", 
-      render: (row) => <OrderStatusBadge status={row.status} /> 
+    {
+      header: "Status",
+      accessor: "status",
+      render: (row) => <OrderStatusBadge status={row.status} />,
     },
   ];
 
@@ -42,9 +43,9 @@ export default function DashboardOverview() {
 
       <div className="space-y-4">
         <h3 className="text-lg font-bold text-foreground">Recent Customer Orders</h3>
-        <DataTable 
-          columns={columns} 
-          data={orders} 
+        <DataTable
+          columns={columns}
+          data={orders}
           emptyMessage="No recent customer orders recorded yet."
         />
       </div>

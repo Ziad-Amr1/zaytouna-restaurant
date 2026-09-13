@@ -1,6 +1,16 @@
 import { useState } from "react";
+
 import DataTable from "@/components/common/DataTable";
 import OrderStatusBadge from "@/components/common/OrderStatusBadge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const ORDER_STATUSES = ["Pending", "Preparing", "Completed", "Cancelled"];
 
 export default function OrdersManagement() {
   // Empty state placeholder ready for API integration
@@ -31,16 +41,25 @@ export default function OrdersManagement() {
       header: "Actions",
       accessor: "id",
       render: (row) => (
-        <select
+        <Select
           value={row.status}
-          onChange={(e) => updateOrderStatus(row.id, e.target.value)}
-          className="rounded-lg border border-border bg-card px-2 py-1 text-xs font-medium text-foreground outline-none"
+          onValueChange={(value) => updateOrderStatus(row.id, value)}
         >
-          <option value="Pending">Pending</option>
-          <option value="Preparing">Preparing</option>
-          <option value="Completed">Completed</option>
-          <option value="Cancelled">Cancelled</option>
-        </select>
+          <SelectTrigger
+            size="sm"
+            aria-label={`Update status for order ${row.id}`}
+            className="rounded-lg px-2 text-xs font-medium"
+          >
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {ORDER_STATUSES.map((status) => (
+              <SelectItem key={status} value={status}>
+                {status}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       ),
     },
   ];
@@ -56,7 +75,6 @@ export default function OrdersManagement() {
         </p>
       </div>
 
-      {/* Render orders table with default empty state */}
       <DataTable
         columns={columns}
         data={orders}

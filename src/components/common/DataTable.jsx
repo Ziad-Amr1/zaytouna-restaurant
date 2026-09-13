@@ -8,7 +8,7 @@ export default function DataTable({ columns, data = [], emptyMessage = "No recor
           <thead className="border-b border-border bg-muted/40 text-xs uppercase text-muted-foreground">
             <tr>
               {columns.map((col, index) => (
-                <th key={index} className="px-6 py-4 font-semibold">
+                <th key={index} scope="col" className="px-6 py-4 font-semibold">
                   {col.header}
                 </th>
               ))}
@@ -19,14 +19,14 @@ export default function DataTable({ columns, data = [], emptyMessage = "No recor
               <tr>
                 <td colSpan={columns.length} className="py-12 text-center">
                   <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">
-                    <Inbox className="h-8 w-8 stroke-1" />
+                    <Inbox className="h-8 w-8 stroke-1" aria-hidden="true" />
                     <p className="text-sm font-medium">{emptyMessage}</p>
                   </div>
                 </td>
               </tr>
             ) : (
               data.map((row, rowIndex) => (
-                <tr key={rowIndex} className="transition-colors hover:bg-muted/30">
+                <tr key={row.id ?? rowIndex} className="transition-colors hover:bg-muted/30">
                   {columns.map((col, colIndex) => (
                     <td key={colIndex} className="whitespace-nowrap px-6 py-4 text-foreground">
                       {col.render ? col.render(row) : row[col.accessor]}

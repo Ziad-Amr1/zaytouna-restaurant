@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { BarChart2, DollarSign, ShoppingBag, TrendingUp, Users } from "lucide-react";
+
 import StatCard from "@/components/common/StatCard";
-import { DollarSign, TrendingUp, Users, ShoppingBag, BarChart2 } from "lucide-react";
 
 export default function Analytics() {
   const [metrics] = useState({
@@ -14,8 +15,12 @@ export default function Analytics() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight text-foreground">Sales & Operations Analytics</h2>
-        <p className="text-sm text-muted-foreground">Financial performance and order analytics for Zaytouna Restaurant.</p>
+        <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          Sales &amp; Operations Analytics
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Financial performance and order analytics for Zaytouna Restaurant.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -26,11 +31,15 @@ export default function Analytics() {
       </div>
 
       <div className="space-y-6 rounded-2xl border border-border bg-card p-6 shadow-sm">
-        <h3 className="text-lg font-bold text-foreground">Sales Distribution by Menu Category</h3>
+        <h3 className="text-lg font-bold text-foreground">
+          Sales Distribution by Menu Category
+        </h3>
         {categoryStats.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-2 py-12 text-muted-foreground">
-            <BarChart2 className="h-8 w-8 stroke-1" />
-            <p className="text-sm font-medium">No sales data recorded to display distribution charts.</p>
+            <BarChart2 className="h-8 w-8 stroke-1" aria-hidden="true" />
+            <p className="text-sm font-medium">
+              No sales data recorded to display distribution charts.
+            </p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -38,10 +47,15 @@ export default function Analytics() {
               <div key={idx} className="space-y-2">
                 <div className="flex justify-between text-sm font-semibold">
                   <span className="text-foreground">{item.category}</span>
-                  <span className="text-emerald-600">{item.sales} ({item.share})</span>
+                  <span className="text-primary">
+                    {item.sales} ({item.share})
+                  </span>
                 </div>
                 <div className="h-3 w-full overflow-hidden rounded-full bg-muted">
-                  <div className={`${item.color} h-full rounded-full transition-all duration-500`} style={{ width: item.share }}></div>
+                  <div
+                    className={`${item.color} h-full rounded-full transition-all duration-500`}
+                    style={{ width: item.share }}
+                  />
                 </div>
               </div>
             ))}
