@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import {
   CalendarCheck,
+  ExternalLink,
   LayoutDashboard,
   LogOut,
   ShieldCheck,
@@ -22,14 +23,14 @@ const NAV_ITEMS = [
   { path: "/admin/analytics", label: "Analytics", icon: TrendingUp },
 ];
 
-export default function AdminSidebar() {
+export function SidebarContent({ onNavigate = () => {}, compact = false }) {
   const { user, logout } = useAuth();
 
   return (
-    <aside className="flex min-h-screen w-64 flex-col justify-between border-r border-border bg-card p-5">
+    <div className="flex h-full flex-col justify-between">
       <div>
-        <div className="mb-6 flex items-center gap-3 border-b border-border px-3 py-4">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary font-bold text-primary-foreground shadow-md shadow-primary/20">
+        <div className={`flex items-center border-b border-border px-3 ${compact ? "mb-3 gap-2.5 py-3" : "mb-6 gap-3 py-4"}`}>
+          <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-primary font-bold text-primary-foreground shadow-md shadow-primary/20 ${compact ? "h-9 w-9 text-sm" : ""}`}>
             Z
           </div>
           <div>
@@ -46,15 +47,16 @@ export default function AdminSidebar() {
                 key={item.path}
                 to={item.path}
                 end={item.end}
+                onClick={onNavigate}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all ${
+                  `flex items-center rounded-xl px-4 text-sm font-medium transition-all ${compact ? "gap-2.5 py-2" : "gap-3 py-3"} ${
                     isActive
                       ? "bg-primary text-primary-foreground shadow-sm shadow-primary/30"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   }`
                 }
               >
-                <Icon size={18} aria-hidden="true" />
+                <Icon size={compact ? 14 : 18} aria-hidden="true" />
                 <span>{item.label}</span>
               </NavLink>
             );
@@ -63,6 +65,16 @@ export default function AdminSidebar() {
       </div>
 
       <div className="space-y-3 border-t border-border pt-4">
+        <NavLink
+          to="/"
+          onClick={onNavigate}
+          aria-label="Back to the public website"
+          className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          <ExternalLink size={compact ? 14 : 16} aria-hidden="true" />
+          <span>Back to Website</span>
+        </NavLink>
+
         <div className="flex items-center gap-3 rounded-xl bg-muted/50 px-3 py-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-xs font-bold text-foreground">
             {user?.name ? user.name.slice(0, 2).toUpperCase() : "AD"}
@@ -84,6 +96,14 @@ export default function AdminSidebar() {
           <span>Sign Out</span>
         </Button>
       </div>
+    </div>
+  );
+}
+
+export default function AdminSidebar() {
+  return (
+    <aside className="hidden w-64 shrink-0 border-r border-border bg-card md:block">
+      <SidebarContent />
     </aside>
   );
 }

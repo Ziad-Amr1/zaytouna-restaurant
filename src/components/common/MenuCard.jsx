@@ -1,52 +1,109 @@
+import { useEffect, useState } from "react";
+import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import useAuth from "@/hooks/useAuth";
+import { isFavorite, toggleFavorite } from "@/lib/favorites";
+import { cn } from "@/lib/utils";
 
 function MenuCard({ dish }) {
+  const { isAuthenticated } = useAuth();
+
+  const [favorite, setFavorite] = useState(() => isFavorite(dish.id));
+
+  useEffect(() => {
+    function handleFavoritesChange() {
+      setFavorite(isFavorite(dish.id));
+    }
+
+    window.addEventListener("favorites:change", handleFavoritesChange);
+
+    return () => {
+      window.removeEventListener("favorites:change", handleFavoritesChange);
+    };
+  }, [dish.id]);
+
+  function handleFavoriteClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    setFavorite(toggleFavorite(dish.id));
+  }
+
   return (
     <Card className="group overflow-hidden p-0">
-      <Link to={`/menu/${dish.id}`} className="block">
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
-          {dish.image ? (
-            <img
-              src={dish.image}
-              alt={dish.name}
-              loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center text-muted-foreground">
-              {dish.name}
-            </div>
-          )}
+      <div className="relative">
+        <Link to={`/menu/${dish.id}`} className="block">
+          <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
+            {dish.image ? (
+              <img
+                src={dish.image}
+                alt={dish.name}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                {dish.name}
+              </div>
+            )}
 
-          {dish.available === false && (
-            <Badge variant="secondary" className="absolute start-3 top-3">
-              Sold out
-            </Badge>
-          )}
-        </div>
-
-        <CardContent className="p-4">
-          <div className="flex items-start justify-between gap-3">
-            <h3 className="text-lg leading-snug text-foreground">{dish.name}</h3>
-            <span className="shrink-0 text-sm font-semibold text-foreground">
-              EGP {dish.price}
-            </span>
+            {dish.available === false && (
+              <Badge variant="secondary" className="absolute start-3 top-3">
+                Sold out
+              </Badge>
+            )}
           </div>
 
-          {dish.category && (
-            <p className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
-              {dish.category}
-            </p>
-          )}
+          <CardContent className="p-4">
+            <div className="flex items-start justify-between gap-3">
+              <h3 className="text-lg leading-snug text-foreground">
+                {dish.name}
+              </h3>
 
-          {dish.description && (
-            <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{dish.description}</p>
-          )}
-        </CardContent>
-      </Link>
+              <span className="shrink-0 text-sm font-semibold text-foreground">
+                EGP {dish.price}
+              </span>
+            </div>
+
+            {dish.category && (
+              <p className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
+                {dish.category}
+              </p>
+            )}
+
+            {dish.description && (
+              <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                {dish.description}
+              </p>
+            )}
+          </CardContent>
+        </Link>
+
+        {isAuthenticated && (
+          <button
+            type="button"
+            onClick={handleFavoriteClick}
+            aria-pressed={favorite}
+            aria-label={
+              favorite
+                ? `Remove ${dish.name} from favorites`
+                : `Add ${dish.name} to favorites`
+            }
+            className="absolute end-3 top-3 z-10 flex size-9 items-center justify-center rounded-full border border-border bg-background/85 text-foreground shadow-sm backdrop-blur transition-colors hover:text-accent-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-focus-ring)"
+          >
+            <Heart
+              className={cn(
+                "size-4",
+                favorite && "fill-accent-strong text-accent-strong",
+              )}
+              aria-hidden="true"
+            />
+          </button>
+        )}
+      </div>
     </Card>
   );
 }

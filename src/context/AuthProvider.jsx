@@ -1,104 +1,129 @@
-import { useEffect, useState } from "react";
-import {
-  getCurrentUser,
-  loginUser,
-  logoutUser,
-  registerUser,
-} from "@/api/authApi";
+import { useEffect, useMemo, useState } from "react";
+
+import { getCurrentUser, loginUser, registerUser } from "@/api/authApi";
+
 import AuthContext from "./AuthContext";
 
-const AuthProvider = ({ children }) => {
-  // If no token exists there is nothing to restore, so start
-  // not-loading; otherwise we wait for /auth/me before rendering.
+function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(
-    () => localStorage.getItem("token") !== null
-  );
 
-  const isAuthenticated = !isLoading && user !== null;
+  const [isLoading, setIsLoading] = useState(() => {
+    return Boolean(localStorage.getItem("token"));
+  });
 
-  const persistSession = (session) => {
-    localStorage.setItem("token", session.token);
-    localStorage.setItem("user", JSON.stringify(session.user));
-    setUser(session.user);
-  };
-
-  const login = async (email, password) => {
-    const response = await loginUser(email, password);
-    const session = response.data;
-    persistSession(session);
-    return session;
-  };
-
-  const register = async (payload) => {
-    const response = await registerUser(payload);
-    const session = response.data;
-    persistSession(session);
-    return session;
-  };
-
-  const logout = async () => {
-    try {
-      await logoutUser();
-    } finally {
-      setUser(null);
-    }
-  };
-
-  // Restore the session on app start by validating the stored token.
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (!token) {
       return;
     }
 
     let cancelled = false;
 
-    const restoreSession = async () => {
+    async function restoreSession() {
       try {
         const response = await getCurrentUser();
-        if (!cancelled) {
-          setUser(response.data);
+        const currentUser = response?.data;
+
+        if (cancelled) {
+          return;
+        }
+
+        if (currentUser) {
+          setUser(currentUser);
+          localStorage.setItem("user", JSON.stringify(currentUser));
+        } else {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
         }
       } catch {
-        if (!cancelled) {
-          setUser(null);
+        if (cancelled) {
+          return;
         }
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setUser(null);
       } finally {
         if (!cancelled) {
           setIsLoading(false);
         }
       }
-    };
+    }
 
-    void restoreSession();
+    restoreSession();
 
     return () => {
       cancelled = true;
     };
   }, []);
 
-  // Clear the session when the API reports an unauthorized response.
   useEffect(() => {
-    const clearSession = () => {
-      setIsLoading(false);
+    function handleUnauthorized() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       setUser(null);
-    };
+      setIsLoading(false);
+    }
 
-    window.addEventListener("auth:unauthorized", clearSession);
+    window.addEventListener("auth:unauthorized", handleUnauthorized);
 
     return () => {
-      window.removeEventListener("auth:unauthorized", clearSession);
+      window.removeEventListener("auth:unauthorized", handleUnauthorized);
     };
   }, []);
 
-  return (
-    <AuthContext.Provider
-      value={{ user, isAuthenticated, isLoading, login, register, logout }}
-    >
-      {children}
-    </AuthContext.Provider>
+  async function login(email, password) {
+    const response = await loginUser(email, password);
+    const session = response?.data;
+
+    if (!session?.token || !session?.user) {
+      throw new Error("Invalid login response from server.");
+    }
+
+    localStorage.setItem("token", session.token);
+    localStorage.setItem("user", JSON.stringify(session.user));
+
+    setUser(session.user);
+
+    return session;
+  }
+
+  async function register(payload) {
+    const response = await registerUser(payload);
+    const session = response?.data;
+
+    if (!session?.token || !session?.user) {
+      throw new Error("Invalid registration response from server.");
+    }
+
+    localStorage.setItem("token", session.token);
+    localStorage.setItem("user", JSON.stringify(session.user));
+
+    setUser(session.user);
+
+    return session;
+  }
+
+  function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+  }
+
+  const value = useMemo(
+    () => ({
+      user,
+      isAuthenticated: Boolean(user),
+      isLoading,
+      login,
+      register,
+      logout,
+    }),
+    [user, isLoading],
   );
-};
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
 
 export default AuthProvider;

@@ -4,9 +4,8 @@ import { Clock, Leaf, MapPin } from "lucide-react";
 
 import { getMenuItems } from "@/api/menuApi";
 import MenuCard from "@/components/common/MenuCard";
+import ReservationModal from "@/components/common/ReservationModal";
 import TestimonialCard from "@/components/common/TestimonialCard";
-import Footer from "@/components/layouts/Footer";
-import Navbar from "@/components/layouts/Navbar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import testimonials from "@/data/testimonials";
@@ -15,6 +14,7 @@ function Landing() {
   const [featured, setFeatured] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -43,13 +43,11 @@ function Landing() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [retryKey]);
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <Navbar />
-      <main className="flex-1">
-        {/* Hero */}
+    <>
+      {/* Hero */}
       <section className="border-b bg-muted/40">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 md:grid-cols-2 md:items-center md:py-24 lg:px-8">
           <div>
@@ -67,6 +65,9 @@ function Landing() {
               <Button asChild size="lg">
                 <Link to="/menu">Browse the menu</Link>
               </Button>
+              <ReservationModal
+                trigger={<Button variant="outline" size="lg">Reserve a table</Button>}
+              />
               <Button variant="outline" size="lg" asChild>
                 <a href="#featured">See tonight&apos;s dishes</a>
               </Button>
@@ -123,9 +124,17 @@ function Landing() {
         </div>
 
         {error && (
-          <p className="mt-6 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-            {error}
-          </p>
+          <div className="mt-6 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            <p>{error}</p>
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-3"
+              onClick={() => setRetryKey((k) => k + 1)}
+            >
+              Try again
+            </Button>
+          </div>
         )}
 
         {!error && (
@@ -156,9 +165,7 @@ function Landing() {
           </div>
         </div>
       </section>
-      </main>
-      <Footer />
-    </div>
+    </>
   );
 }
 

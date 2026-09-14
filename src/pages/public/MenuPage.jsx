@@ -3,8 +3,6 @@ import { Search } from "lucide-react";
 
 import { getMenuItems } from "@/api/menuApi";
 import MenuCard from "@/components/common/MenuCard";
-import Footer from "@/components/layouts/Footer";
-import Navbar from "@/components/layouts/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -62,10 +60,7 @@ function MenuPage() {
   const visibleCategories = categories.length ? categories : ["all"];
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <Navbar />
-      <main className="flex-1">
-        <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+    <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold text-foreground sm:text-4xl">Our menu</h1>
           <p className="mt-2 max-w-lg text-muted-foreground">
             Everything here is made to order — dishes marked sold out will be back on the next
@@ -159,9 +154,6 @@ function MenuPage() {
             </p>
           )}
         </section>
-      </main>
-      <Footer />
-    </div>
   );
 }
 

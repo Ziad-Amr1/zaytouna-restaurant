@@ -59,8 +59,7 @@ function Login() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md space-y-6 rounded-2xl border bg-card p-8 shadow-sm">
+    <div className="w-full max-w-md space-y-6 rounded-2xl border bg-card p-8 shadow-sm">
         <div className="space-y-2 text-center">
           <h2 className="text-3xl font-bold tracking-tight text-foreground">
             Sign in
@@ -160,13 +159,13 @@ function Login() {
           Don&apos;t have an account?{" "}
           <Link
             to="/register"
+            state={{ from: redirectTarget }}
             className="font-medium text-primary hover:underline"
           >
             Create an account
           </Link>
         </p>
       </div>
-    </main>
   );
 }
 

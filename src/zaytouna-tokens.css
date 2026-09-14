@@ -92,6 +92,7 @@
 
   --color-border-brand: oklch(0.85 0.02 120);          /* hairlines, 1.6:1 decorative */
   --color-focus-ring: var(--color-brass-600);          /* was brass-500 (v2, 3:1 UI) */
+  --overlay: oklch(0.145 0 0 / 50%);                    /* modal/scrim backdrop */
 
   --color-accent: var(--color-brass-500);              /* fills, decorations */
   --color-accent-text: var(--color-brass-700);         /* links/small accent text — v2 */
@@ -140,6 +141,7 @@
 
   --color-border-brand: oklch(1 0 0 / 14%);
   --color-focus-ring: var(--color-brass-500);          /* 5.75:1 on olive-950 */
+  --overlay: oklch(0 0 0 / 60%);                        /* modal/scrim backdrop */
 
   --color-accent: var(--color-brass-500);
   --color-accent-text: var(--color-brass-300);         /* 10.45:1 — AAA links (v2) */
@@ -174,6 +176,7 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-overlay: var(--overlay);
 
   /* Brand palette (olive/brass/brick/stone) is deliberately NOT wired to
      utility generation yet — no app component uses bg-olive-* or text-brass-*

@@ -1,197 +1,158 @@
-import { useState } from "react";
-import { Calendar } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CalendarDays, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
-import DataTable from "@/components/common/DataTable";
-import { Badge } from "@/components/ui/badge";
+import EmptyState from "@/components/common/EmptyState";
+import ReservationModal from "@/components/common/ReservationModal";
+import StatusBadge from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import useAuth from "@/hooks/useAuth";
+import { getReservations, updateReservationStatus } from "@/lib/reservations";
 
-const STATUS_STYLES = {
-  Confirmed: "bg-emerald-500/10 text-emerald-700 border-emerald-500/20",
-  Pending: "bg-amber-500/10 text-amber-700 border-amber-500/20",
-  Cancelled: "bg-rose-500/10 text-rose-700 border-rose-500/20",
-};
-
-const EMPTY_FORM = {
-  guest: "",
-  phone: "",
-  date: "",
-  guests: "2 Guests",
-  table: "Main Hall",
-};
-
-export default function ReservationsManagement() {
-  const [reservations, setReservations] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newRes, setNewRes] = useState(EMPTY_FORM);
-
-  const updateStatus = (id, newStatus) => {
-    setReservations((prev) =>
-      prev.map((res) => (res.id === id ? { ...res, status: newStatus } : res))
-    );
-  };
-
-  const handleAddReservation = (e) => {
-    e.preventDefault();
-    if (!newRes.guest || !newRes.phone) return;
-
-    setReservations((prev) => [
-      ...prev,
-      {
-        id: `#RES-${Date.now().toString().slice(-4)}`,
-        guest: newRes.guest,
-        phone: newRes.phone,
-        date: newRes.date || "Today",
-        guests: newRes.guests,
-        table: newRes.table,
-        status: "Pending",
-      },
-    ]);
-    setNewRes(EMPTY_FORM);
-    setIsModalOpen(false);
-  };
-
-  const columns = [
-    { header: "Reservation ID", accessor: "id" },
-    { header: "Guest Name", accessor: "guest" },
-    { header: "Phone Number", accessor: "phone" },
-    { header: "Date & Time", accessor: "date" },
-    { header: "Party Size", accessor: "guests" },
-    { header: "Table Area", accessor: "table" },
-    {
-      header: "Status",
-      accessor: "status",
-      render: (row) => (
-        <Badge className={STATUS_STYLES[row.status] || "bg-muted text-muted-foreground"}>
-          {row.status}
-        </Badge>
-      ),
-    },
-    {
-      header: "Manage",
-      accessor: "id",
-      render: (row) => (
-        <div className="flex items-center gap-2">
-          {row.status === "Pending" && (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => updateStatus(row.id, "Confirmed")}
-            >
-              Confirm
-            </Button>
-          )}
-          {row.status !== "Cancelled" && (
-            <Button
-              size="sm"
-              variant="outline"
-              className="text-destructive hover:text-destructive"
-              onClick={() => updateStatus(row.id, "Cancelled")}
-            >
-              Cancel
-            </Button>
-          )}
-        </div>
-      ),
-    },
-  ];
+function ReservationCard({ reservation, onCancel, cancelling }) {
+  const dateTime =
+    reservation.date && reservation.time
+      ? `${reservation.date} at ${reservation.time}`
+      : reservation.date || reservation.time || "";
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+    <article className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">Table Reservations</h2>
           <p className="text-sm text-muted-foreground">
-            Manage seating, bookings, and customer table allocations.
+            Reservation #{reservation.id}
           </p>
+
+          {dateTime && (
+            <p className="mt-0.5 text-xs text-muted-foreground">{dateTime}</p>
+          )}
         </div>
-        <Button onClick={() => setIsModalOpen(true)} className="rounded-xl px-4 text-sm">
-          <Calendar size={16} aria-hidden="true" /> New Reservation
-        </Button>
+
+        <StatusBadge status={reservation.status} />
       </div>
 
-      <DataTable
-        columns={columns}
-        data={reservations}
-        emptyMessage="No table reservations found yet."
-      />
+      <div className="mt-4 border-t border-border pt-4">
+        <dl className="grid gap-4 text-sm sm:grid-cols-2">
+          <div>
+            <dt className="font-medium text-muted-foreground">Party size</dt>
 
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="rounded-2xl sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Add New Reservation</DialogTitle>
-            <DialogDescription>
-              Enter the guest&apos;s details to create a table reservation.
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={handleAddReservation} className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="res-guest" className="text-xs font-semibold text-muted-foreground">
-                Guest Name
-              </label>
-              <Input
-                id="res-guest"
-                type="text"
-                required
-                value={newRes.guest}
-                onChange={(e) => setNewRes({ ...newRes, guest: e.target.value })}
-                placeholder="Guest Full Name"
-              />
+            <dd className="mt-0.5 font-semibold">
+              {reservation.partySize}{" "}
+              {reservation.partySize === 1 ? "guest" : "guests"}
+            </dd>
+          </div>
+
+          {reservation.phone && (
+            <div>
+              <dt className="font-medium text-muted-foreground">Phone</dt>
+
+              <dd className="mt-0.5 font-semibold">{reservation.phone}</dd>
             </div>
-            <div className="space-y-2">
-              <label htmlFor="res-phone" className="text-xs font-semibold text-muted-foreground">
-                Phone Number
-              </label>
-              <Input
-                id="res-phone"
-                type="tel"
-                required
-                value={newRes.phone}
-                onChange={(e) => setNewRes({ ...newRes, phone: e.target.value })}
-                placeholder="+20 1..."
-              />
+          )}
+
+          {reservation.notes && (
+            <div className="sm:col-span-2">
+              <dt className="font-medium text-muted-foreground">Notes</dt>
+
+              <dd className="mt-0.5">{reservation.notes}</dd>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2">
-                <label htmlFor="res-guests" className="text-xs font-semibold text-muted-foreground">
-                  Party Size
-                </label>
-                <Input
-                  id="res-guests"
-                  type="text"
-                  value={newRes.guests}
-                  onChange={(e) => setNewRes({ ...newRes, guests: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="res-table" className="text-xs font-semibold text-muted-foreground">
-                  Area
-                </label>
-                <Input
-                  id="res-table"
-                  type="text"
-                  value={newRes.table}
-                  onChange={(e) => setNewRes({ ...newRes, table: e.target.value })}
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
-                Cancel
-              </Button>
-              <Button type="submit">Create Booking</Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+          )}
+        </dl>
+      </div>
+
+      {reservation.status !== "cancelled" && (
+        <div className="mt-4 border-t border-border pt-4">
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={cancelling}
+            className="text-destructive hover:text-destructive"
+            onClick={() => onCancel(reservation.id)}
+          >
+            {cancelling && <Loader2 className="animate-spin" />}
+            {cancelling ? "Cancelling…" : "Cancel reservation"}
+          </Button>
+        </div>
+      )}
+    </article>
+  );
+}
+
+function ReservationsPage() {
+  const { user } = useAuth();
+
+  const [reservations, setReservations] = useState(getReservations);
+  const [cancellingId, setCancellingId] = useState(null);
+
+  useEffect(() => {
+    function handleChange() {
+      setReservations(getReservations());
+    }
+
+    window.addEventListener("reservations:change", handleChange);
+
+    return () => {
+      window.removeEventListener("reservations:change", handleChange);
+    };
+  }, [user?.id]);
+
+  function handleCancel(id) {
+    setCancellingId(id);
+
+    try {
+      updateReservationStatus(id, "cancelled");
+      toast.success("Reservation cancelled");
+    } catch {
+      toast.error("Could not cancel the reservation. Please try again.");
+    } finally {
+      setCancellingId(null);
+    }
+  }
+
+  return (
+    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">My reservations</h1>
+
+          <p className="mt-1 text-muted-foreground">
+            Your upcoming and past table bookings.
+          </p>
+        </div>
+
+        <ReservationModal
+          trigger={
+            <Button>
+              <CalendarDays />
+              New reservation
+            </Button>
+          }
+        />
+      </div>
+
+      <div className="mt-8 space-y-5">
+        {reservations.length === 0 ? (
+          <EmptyState
+            icon={CalendarDays}
+            title="No reservations yet"
+            description="Book a table and it will appear here."
+            action={
+              <ReservationModal trigger={<Button>Reserve a table</Button>} />
+            }
+          />
+        ) : (
+          reservations.map((reservation) => (
+            <ReservationCard
+              key={reservation.id}
+              reservation={reservation}
+              onCancel={handleCancel}
+              cancelling={cancellingId === reservation.id}
+            />
+          ))
+        )}
+      </div>
     </div>
   );
 }
+
+export default ReservationsPage;
