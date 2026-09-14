@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark, [data-theme="dark"]) *);
+
+/*
+ * Design System — Zaytouna Restaurant  (v2, contrast-audited)
+ * ------------------------------------------------------------
+ * Base: shadcn/ui-neutral palette (CSS variables, oklch) — unchanged.
+ * Brand: olive / brass / brick, in its own namespace so it never collides
+ *   with shadcn's --primary/--accent/--secondary.
+ *
+ * v2 changes (see contrast-report for full numbers):
+ *  1. Single `@import "tailwindcss"`; no external fonts (the project runs the
+ *     default system font stack — Developer2's Fraunces/Work Sans NOT adopted).
+ *  2. Dark selector unified: `[data-theme="dark"]` OR `.class` everywhere
+ *     (was inconsistent between the two files).
+ *  3. Base shadcn tokens exposed via `@theme inline` for utility generation.
+ *     The brand palette (olive/brass/brick/stone) is intentionally NOT wired
+ *     to utilities until an app component actually uses a bg-olive-* or
+ *     text-brass-* class — avoid shipping unused utility mappings.
+ *  4. Contrast fixes (WCAG 2.2):
+ *     - text-secondary (light)  olive-500 -> olive-700
+ *       (was 5.28/4.91 AA, now 8.64/8.03 AAA — headroom for small text)
+ *     - new brass-700 (#885800) as the ONLY brass allowed as text on light
+ *       surfaces (5.63 AA). brass-600 = large text/icons only (3.58).
+ *       brass-500 on stone was 2.80 — never use as text there.
+ *     - new brick-400 (#dc6146) for dark-mode accent text (4.84 AA on
+ *       olive-950; brick-500 on dark was 2.66 — light-only from now on)
+ *     - accent buttons: dark text (olive-950) on brass-500 (5.75 AA),
+ *       never white (2.80). Brick buttons: white on brick-600 (7.57 AAA).
+ *     - focus-ring (light): brass-500 -> brass-600 (2.80 -> 3.58, meets
+ *       WCAG 1.4.11 non-text 3:1). Dark keeps brass-500 (5.75).
+ *  5. Dark mode completed: focus-ring and the full semantic token set
+ *     (was partially missing).
+ */
+
+:root {
+  /* ---- Base tokens (shadcn/ui — unchanged) ---- */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --radius: 0.625rem;
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+
+  /* ---- Brand palette — "Zaytouna" = olive (Ar.) ---- */
+  --color-olive-950: oklch(0.215 0.018 127.344);  /* #171b12 ink        */
+  --color-olive-900: oklch(0.274 0.027 129.625);  /* #232a1c dark surf.2*/
+  --color-olive-700: oklch(0.393 0.038 129.625);  /* #3f4a34 sec. text  */
+  --color-olive-500: oklch(0.507 0.049 129.615);  /* #5c6b4d borders/UI */
+  --color-olive-200: oklch(0.885 0.027 118.374);  /* #d7dcc8 dark text.2*/
+
+  --color-brass-700: oklch(0.5 0.115 76.5);       /* #885800 link text (light) — v2 */
+  --color-brass-600: oklch(0.608 0.116 78.528);   /* #a8791f icons/large text */
+  --color-brass-500: oklch(0.671 0.123 76.489);   /* #c08a2e fills only on light */
+  --color-brass-300: oklch(0.834 0.093 86.616);   /* #e3c581 dark link text — v2 */
+
+  --color-brick-600: oklch(0.441 0.124 33.359);   /* #8a3220 accent-strong (light) */
+  --color-brick-500: oklch(0.495 0.143 35.403);   /* #a33b20 light fills */
+  --color-brick-400: oklch(0.64 0.16 34);         /* #dc6146 accent-strong (dark) — v2 */
+
+  --color-stone-50: oklch(0.972 0.005 106.498);   /* #f6f6f2 surface */
+  --color-stone-100: oklch(0.947 0.011 106.601);  /* #eeeee6 surface 2 */
+
+  /* ---- Semantic app tokens: LIGHT ---- */
+  --color-surface: var(--color-stone-50);
+  --color-surface-secondary: var(--color-stone-100);
+  --color-surface-elevated: oklch(1 0 0);              /* cards/popovers above surface */
+  --color-text-primary: var(--color-olive-950);
+  --color-text-secondary: var(--color-olive-700);      /* was olive-500 (v2) */
+  --color-text-on-accent: var(--color-olive-950);      /* text on brass fills — v2 */
+  --color-text-on-accent-strong: var(--color-stone-50);/* text on brick fills */
+
+  --color-border-brand: oklch(0.85 0.02 120);          /* hairlines, 1.6:1 decorative */
+  --color-focus-ring: var(--color-brass-600);          /* was brass-500 (v2, 3:1 UI) */
+
+  --color-accent: var(--color-brass-500);              /* fills, decorations */
+  --color-accent-text: var(--color-brass-700);         /* links/small accent text — v2 */
+  --color-accent-strong: var(--color-brick-600);       /* CTA text/borders (light) */
+
+  --radius-card: 0.75rem;
+}
+
+/* ---- Semantic app tokens: DARK ---- */
+.dark,
+[data-theme="dark"] {
+  /* Base tokens (shadcn/ui) */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+
+  /* Brand semantic tokens — dark side */
+  --color-surface: var(--color-olive-950);
+  --color-surface-secondary: var(--color-olive-900);
+  --color-surface-elevated: oklch(0.32 0.03 130);      /* cards above dark surface */
+  --color-text-primary: var(--color-stone-50);
+  --color-text-secondary: var(--color-olive-200);
+  --color-text-on-accent: var(--color-olive-950);
+  --color-text-on-accent-strong: var(--color-olive-950);
+
+  --color-border-brand: oklch(1 0 0 / 14%);
+  --color-focus-ring: var(--color-brass-500);          /* 5.75:1 on olive-950 */
+
+  --color-accent: var(--color-brass-500);
+  --color-accent-text: var(--color-brass-300);         /* 10.45:1 — AAA links (v2) */
+  --color-accent-strong: var(--color-brick-400);       /* was brick-500 = 2.66:1 (v2) */
+}
+
+/* ---- Tailwind v4 theme wiring ----
+ * Base tokens + brand palette mapped to utilities. Without this block the
+ * --color-* variables above are inert for class generation (v2 fix). */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Brand palette (olive/brass/brick/stone) is deliberately NOT wired to
+     utility generation yet — no app component uses bg-olive-* or text-brass-*
+     classes. The palette variables above stay available for arbitrary-value
+     use (e.g. bg-(--color-olive-700)) until an actual consumer needs a class;
+     this keeps the compiled utility set to what the app really uses. */
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  /* Keyboard focus: brand ring, 3:1+ against both surfaces (v2) */
+  :focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+/* Reduced motion: honor the OS preference (quality floor) */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
