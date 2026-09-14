@@ -1,4 +1,130 @@
 {
-    "common": {},
-    "dashboard": {}
+  "common": {
+    "retry": "Try again",
+    "comingSoon": "Coming soon"
+  },
+  "nav": {
+    "home": "Home",
+    "menu": "Menu",
+    "cart": "Cart",
+    "favorites": "Favorites",
+    "orders": "My orders",
+    "reservations": "Reservations",
+    "admin": "Admin",
+    "profile": "Profile",
+    "login": "Log in",
+    "signup": "Sign up",
+    "logout": "Log out",
+    "accountMenu": "Account menu",
+    "openMenu": "Open navigation menu",
+    "navigationMenu": "Navigation menu",
+    "themeToLight": "Switch to light theme",
+    "themeToDark": "Switch to dark theme",
+    "language": "Language"
+  },
+  "menu": {
+    "title": "Our menu",
+    "intro": "Everything here is made to order — dishes marked sold out will be back on the next delivery of that ingredient.",
+    "searchPlaceholder": "Search dishes…",
+    "searchLabel": "Search dishes",
+    "clearSearch": "Clear search",
+    "filterByCategory": "Filter by category",
+    "allCategories": "All",
+    "results_one": "{{count}} dish",
+    "results_other": "{{count}} dishes",
+    "filterCategory": "Category:",
+    "clearCategory": "Remove {{category}} filter",
+    "filterSearch": "Search:",
+    "clearFilters": "Clear filters",
+    "error": "We couldn't load the menu right now. Please try again.",
+    "empty": "Nothing matches that search. Try a different dish name or category.",
+    "addToCart": "Add to cart",
+    "soldOut": "Sold out",
+    "addedToCart": "{{name}} added to your cart",
+    "addFavorite": "Add {{name}} to favorites",
+    "removeFavorite": "Remove {{name}} from favorites"
+  },
+  "cart": {
+    "title": "Your cart",
+    "itemsCount_one": "{{count}} item",
+    "itemsCount_other": "{{count}} items",
+    "emptyTitle": "Your cart is empty",
+    "emptyDescription": "Browse the menu to add dishes to your cart.",
+    "browseMenu": "Browse the menu",
+    "unitPrice": "{{price}} each",
+    "quantity": "Quantity",
+    "minus": "Decrease quantity",
+    "plus": "Increase quantity",
+    "removed": "{{name}} removed from your cart",
+    "removeItem": "Remove {{name}}",
+    "guestNote": "Checkout requires a Zaytouna account —",
+    "loginLink": "log in to place your order",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "checkout": "Checkout",
+    "placingOrder": "Placing order…",
+    "continueShopping": "Continue browsing",
+    "clear": "Clear cart",
+    "clearTitle": "Clear your cart?",
+    "clearDescription": "This removes every dish from your cart. You can start fresh from the menu.",
+    "clearConfirm": "Clear cart",
+    "cancel": "Cancel",
+    "orderPlaced": "Order placed",
+    "orderPlacedDescription": "Your order is on its way to the kitchen.",
+    "orderFailed": "We couldn't place your order right now. Please try again."
+  },
+  "landing": {
+    "tagline": "Levantine table, Cairo kitchen",
+    "title": "Olive oil, open fire, and a table that's always being set for you.",
+    "description": "Zaytouna serves slow-cooked mezze and charcoal grills the way they're meant to be shared — order ahead for pickup, or reserve a table for tonight.",
+    "browseMenu": "Browse the menu",
+    "reserveTable": "Reserve a table",
+    "seeTonight": "See tonight's dishes",
+    "info": {
+      "oilTitle": "Cold-pressed, always",
+      "oilDesc": "Everything starts with our own olive oil.",
+      "hoursTitle": "Open 12pm – 1am",
+      "hoursDesc": "Kitchen takes last orders at midnight.",
+      "locationTitle": "Maadi, Cairo",
+      "locationDesc": "Street parking and valet after 7pm."
+    },
+    "categories": {
+      "title": "Order by craving",
+      "viewAll": "View full menu",
+      "shopNow": "Order now"
+    },
+    "featuredTitle": "From the kitchen tonight",
+    "fullMenu": "Full menu",
+    "error": "We couldn't load the menu right now. Please try again.",
+    "menuPreparing": "The menu is being prepared — check back soon.",
+    "testimonialsTitle": "What regulars say",
+    "banner": {
+      "label": "Order ahead",
+      "headline": "Grills and mezze ready in 45 minutes",
+      "description": "Skip the wait — order online for pickup, or take tonight's menu to go.",
+      "cta": "Order now"
+    },
+    "newsletter": {
+      "title": "Stay in the loop",
+      "description": "Fresh dishes, seasonal specials, and table offers — no spam.",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "you@example.com",
+      "subscribe": "Subscribe"
+    }
+  },
+  "menuCategories": {
+    "mainCourse": "Main Course",
+    "appetizer": "Appetizer",
+    "dessert": "Dessert",
+    "beverage": "Beverage"
+  },
+  "footer": {
+    "tagline": "Levantine table, Cairo kitchen.",
+    "exploreLabel": "Explore",
+    "explore": "Explore",
+    "visiting": "Visiting us",
+    "hours": "Open 12pm – 1am",
+    "location": "Maadi, Cairo",
+    "copyright": "© {{year}} Zaytouna. All rights reserved."
+  }
 }

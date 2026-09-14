@@ -5,6 +5,7 @@ import Registration from "@/pages/auth/Registration";
 import Landing from "@/pages/public/Landing";
 import MenuPage from "@/pages/public/MenuPage";
 import DishDetailsPage from "@/pages/public/DishDetailsPage";
+import CartPage from "@/pages/cart/CartPage";
 import UnauthorizedPage from "@/pages/public/UnauthorizedPage";
 import NotFoundPage from "@/pages/public/NotFoundPage";
 import ProfilePage from "@/pages/user/ProfilePage";
@@ -41,6 +42,7 @@ function AppRoutes() {
         <Route path="/" element={<Landing />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/menu/:id" element={<DishDetailsPage />} />
+        <Route path="/cart" element={<CartPage />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/profile" element={<ProfilePage />} />

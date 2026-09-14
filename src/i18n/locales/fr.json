@@ -1,0 +1,130 @@
+{
+  "common": {
+    "retry": "Réessayer",
+    "comingSoon": "Bientôt disponible"
+  },
+  "nav": {
+    "home": "Accueil",
+    "menu": "Menu",
+    "cart": "Panier",
+    "favorites": "Favoris",
+    "orders": "Mes commandes",
+    "reservations": "Réservations",
+    "admin": "Admin",
+    "profile": "Profil",
+    "login": "Connexion",
+    "signup": "S'inscrire",
+    "logout": "Déconnexion",
+    "accountMenu": "Menu du compte",
+    "openMenu": "Ouvrir le menu de navigation",
+    "navigationMenu": "Menu de navigation",
+    "themeToLight": "Passer au thème clair",
+    "themeToDark": "Passer au thème sombre",
+    "language": "Langue"
+  },
+  "menu": {
+    "title": "Notre menu",
+    "intro": "Tout est préparé à la commande — les plats épuisés reviennent avec la prochaine livraison de l'ingrédient.",
+    "searchPlaceholder": "Rechercher des plats…",
+    "searchLabel": "Rechercher des plats",
+    "clearSearch": "Effacer la recherche",
+    "filterByCategory": "Filtrer par catégorie",
+    "allCategories": "Tout",
+    "results_one": "{{count}} plat",
+    "results_other": "{{count}} plats",
+    "filterCategory": "Catégorie :",
+    "clearCategory": "Retirer le filtre {{category}}",
+    "filterSearch": "Recherche :",
+    "clearFilters": "Effacer les filtres",
+    "error": "Impossible de charger le menu pour le moment. Réessayez.",
+    "empty": "Aucun résultat. Essayez un autre plat ou une autre catégorie.",
+    "addToCart": "Ajouter au panier",
+    "soldOut": "Épuisé",
+    "addedToCart": "{{name}} ajouté à votre panier",
+    "addFavorite": "Ajouter {{name}} aux favoris",
+    "removeFavorite": "Retirer {{name}} des favoris"
+  },
+  "cart": {
+    "title": "Votre panier",
+    "itemsCount_one": "{{count}} article",
+    "itemsCount_other": "{{count}} articles",
+    "emptyTitle": "Votre panier est vide",
+    "emptyDescription": "Parcourez le menu pour ajouter des plats à votre panier.",
+    "browseMenu": "Parcourir le menu",
+    "unitPrice": "{{price}} pièce",
+    "quantity": "Quantité",
+    "minus": "Diminuer la quantité",
+    "plus": "Augmenter la quantité",
+    "removed": "{{name}} retiré de votre panier",
+    "removeItem": "Retirer {{name}}",
+    "guestNote": "La commande nécessite un compte Zaytouna —",
+    "loginLink": "connectez-vous pour passer votre commande",
+    "subtotal": "Sous-total",
+    "total": "Total",
+    "checkout": "Commander",
+    "placingOrder": "Commande en cours…",
+    "continueShopping": "Continuer",
+    "clear": "Vider le panier",
+    "clearTitle": "Vider votre panier ?",
+    "clearDescription": "Cela retire tous les plats de votre panier. Vous pouvez recommencer depuis le menu.",
+    "clearConfirm": "Vider le panier",
+    "cancel": "Annuler",
+    "orderPlaced": "Commande passée",
+    "orderPlacedDescription": "Votre commande part en cuisine.",
+    "orderFailed": "Impossible de passer la commande pour le moment. Réessayez."
+  },
+  "landing": {
+    "tagline": "Table du Levant, cuisine du Caire",
+    "title": "Huile d'olive, feu vif et une table toujours prête pour vous.",
+    "description": "Zaytouna sert mezze mijotés et grillades au charbon comme ils se partagent — commandez à l'avance pour retrait, ou réservez une table pour ce soir.",
+    "browseMenu": "Voir le menu",
+    "reserveTable": "Réserver une table",
+    "seeTonight": "Les plats du soir",
+    "info": {
+      "oilTitle": "Toujours pressé à froid",
+      "oilDesc": "Tout commence avec notre propre huile d'olive.",
+      "hoursTitle": "Ouvert de 12h à 1h",
+      "hoursDesc": "La cuisine prend les dernières commandes à minuit.",
+      "locationTitle": "Maadi, Le Caire",
+      "locationDesc": "Stationnement en rue et voiturier après 19h."
+    },
+    "categories": {
+      "title": "Commandez selon vos envies",
+      "viewAll": "Voir le menu complet",
+      "shopNow": "Commander"
+    },
+    "featuredTitle": "De la cuisine ce soir",
+    "fullMenu": "Menu complet",
+    "error": "Impossible de charger le menu pour le moment. Réessayez.",
+    "menuPreparing": "Le menu se prépare — revenez bientôt.",
+    "testimonialsTitle": "Ce que disent nos habitués",
+    "banner": {
+      "label": "Commandez à l'avance",
+      "headline": "Grillades et mezze prêts en 45 minutes",
+      "description": "Évitez l'attente — commandez en ligne pour retrait, ou emportez le menu du soir.",
+      "cta": "Commander"
+    },
+    "newsletter": {
+      "title": "Restez informé",
+      "description": "Plats frais, spécialités de saison et offres de table — sans spam.",
+      "emailLabel": "Adresse e-mail",
+      "emailPlaceholder": "vous@exemple.com",
+      "subscribe": "S'abonner"
+    }
+  },
+  "menuCategories": {
+    "mainCourse": "Plat principal",
+    "appetizer": "Entrée",
+    "dessert": "Dessert",
+    "beverage": "Boisson"
+  },
+  "footer": {
+    "tagline": "Table du Levant, cuisine du Caire.",
+    "exploreLabel": "Explorer",
+    "explore": "Explorer",
+    "visiting": "Nous rendre visite",
+    "hours": "Ouvert de 12h à 1h",
+    "location": "Maadi, Le Caire",
+    "copyright": "© {{year}} Zaytouna. Tous droits réservés."
+  }
+}
