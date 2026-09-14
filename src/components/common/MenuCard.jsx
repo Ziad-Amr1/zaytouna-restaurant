@@ -26,7 +26,6 @@ function MenuCard({ dish }) {
     }
 
     window.addEventListener("favorites:change", handleFavoritesChange);
-
     return () => {
       window.removeEventListener("favorites:change", handleFavoritesChange);
     };
@@ -35,14 +34,12 @@ function MenuCard({ dish }) {
   function handleFavoriteClick(event) {
     event.preventDefault();
     event.stopPropagation();
-
     setFavorite(toggleFavorite(dish.id));
   }
 
   function handleAddToCart(event) {
     event.preventDefault();
     event.stopPropagation();
-
     addItem(dish);
     toast.success(t("menu.addedToCart", { name: dish.name }));
   }
@@ -50,9 +47,11 @@ function MenuCard({ dish }) {
   const soldOut = dish.available === false;
 
   return (
-    <Card className="group flex flex-col overflow-hidden p-0">
+    /* h-full: fill the grid cell so all cards are equal height */
+    <Card className="group flex h-full flex-col overflow-hidden p-0">
       <div className="relative">
         <Link to={`/menu/${dish.id}`} className="block">
+          {/* fixed ratio: identical image boxes for every dish */}
           <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
             {dish.image ? (
               <img
@@ -62,7 +61,7 @@ function MenuCard({ dish }) {
                 className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+              <div className="flex h-full w-full items-center justify-center px-4 text-center text-sm text-muted-foreground">
                 {dish.name}
               </div>
             )}
@@ -99,40 +98,52 @@ function MenuCard({ dish }) {
       </div>
 
       <div className="flex flex-1 flex-col p-4">
+        {/* min-h reserves 2 lines so 1-line titles don't shrink the card */}
         <div className="flex items-start justify-between gap-3">
-          <h3 className="text-lg leading-snug text-foreground">
+          <h3 className="line-clamp-2 min-h-10 text-lg leading-snug text-foreground">
             <Link to={`/menu/${dish.id}`}>{dish.name}</Link>
           </h3>
 
-          <span className="shrink-0 text-sm font-semibold text-foreground">
+          <span className="shrink-0 pt-0.5 text-sm font-semibold text-foreground">
             {formatPrice(dish.price)}
           </span>
         </div>
 
-        {dish.category && (
-          <p className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
-            {dish.category}
-          </p>
-        )}
+        {/* always rendered — empty fallback keeps every card the same height */}
+        <p className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
+          {dish.category || "\u00A0"}
+        </p>
 
-        {dish.description && (
-          <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-            {dish.description}
-          </p>
-        )}
+        <p className="mt-2 line-clamp-2 min-h-10 text-sm text-muted-foreground">
+          {dish.description || "\u00A0"}
+        </p>
 
-        {!soldOut && (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            className="mt-4 w-full"
-            onClick={handleAddToCart}
-          >
-            <ShoppingCart className="size-4" aria-hidden="true" />
-            {t("menu.addToCart")}
-          </Button>
-        )}
+        {/* always rendered; mt-auto pins it to the bottom.
+            sold-out shows a disabled button so the space is identical */}
+        <div className="mt-auto pt-4">
+          {soldOut ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="w-full"
+              disabled
+            >
+              {t("menu.soldOut")}
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="w-full"
+              onClick={handleAddToCart}
+            >
+              <ShoppingCart className="size-4" aria-hidden="true" />
+              {t("menu.addToCart")}
+            </Button>
+          )}
+        </div>
       </div>
     </Card>
   );
