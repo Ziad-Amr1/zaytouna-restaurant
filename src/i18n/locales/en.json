@@ -1,7 +1,8 @@
 {
   "common": {
     "retry": "Try again",
-    "comingSoon": "Coming soon"
+    "comingSoon": "Coming soon",
+    "somethingWentWrong": "Something went wrong"
   },
   "nav": {
     "home": "Home",
@@ -21,6 +22,26 @@
     "themeToLight": "Switch to light theme",
     "themeToDark": "Switch to dark theme",
     "language": "Language"
+  },
+  "admin": {
+    "mobileTitle": "Zaytouna Admin",
+    "navigationLabel": "Admin navigation",
+    "navigationTitle": "Admin navigation",
+    "navigationDescription": "Navigate the admin console sections.",
+    "openMenu": "Open admin menu",
+    "brandSubtitle": "Levantine & Grill",
+    "backToWebsite": "Back to Website",
+    "defaultUser": "Admin",
+    "defaultRole": "admin",
+    "signOut": "Sign Out",
+    "nav": {
+      "dashboard": "Dashboard",
+      "menuManagement": "Menu Management",
+      "orders": "Orders",
+      "reservations": "Reservations",
+      "usersRoles": "Users & Roles",
+      "analytics": "Analytics"
+    }
   },
   "menu": {
     "title": "Our menu",
@@ -110,6 +131,63 @@
       "emailLabel": "Email address",
       "emailPlaceholder": "you@example.com",
       "subscribe": "Subscribe"
+    }
+  },
+  "favorites": {
+    "title": "My favorites",
+    "loading": "Loading your saved dishes…",
+    "savedCount_one": "{{count}} saved dish",
+    "savedCount_other": "{{count}} saved dishes",
+    "error": "We couldn't load your favorites right now. Please try again.",
+    "empty": {
+      "title": "No favorites yet",
+      "description": "Tap the heart on any dish to save it here for next time.",
+      "action": "Browse the menu"
+    }
+  },
+  "orders": {
+    "title": "My orders",
+    "subtitle": "A history of everything you've ordered.",
+    "error": "We couldn't load your orders right now. Please try again.",
+    "orderNumber": "Order #{{id}}",
+    "total": "Total",
+    "empty": {
+      "title": "No orders yet",
+      "description": "When you place an order it will show up here so you can follow it.",
+      "action": "Explore the menu"
+    }
+  },
+  "profile": {
+    "title": "My profile",
+    "subtitle": "Your account details at Zaytouna Restaurant.",
+    "fullName": "Full name",
+    "email": "Email",
+    "memberSince": "Member since",
+    "viewOrders": "View my orders",
+    "browseMenu": "Browse the menu"
+  },
+  "reservations": {
+    "title": "My reservations",
+    "subtitle": "Your upcoming and past table bookings.",
+    "new": "New reservation",
+    "newTable": "Reserve a table",
+    "number": "Reservation #{{id}}",
+    "at": "at",
+    "partySize": "Party size",
+    "guests_one": "{{count}} guest",
+    "guests_other": "{{count}} guests",
+    "phone": "Phone",
+    "notes": "Notes",
+    "cancelling": "Cancelling…",
+    "cancel": "Cancel reservation",
+    "toast": {
+      "cancelled": "Reservation cancelled",
+      "cancelError": "Could not cancel the reservation. Please try again."
+    },
+    "empty": {
+      "title": "No reservations yet",
+      "description": "Book a table and it will appear here.",
+      "action": "Reserve a table"
     }
   },
   "menuCategories": {

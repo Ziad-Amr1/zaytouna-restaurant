@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { CalendarDays, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 import EmptyState from "@/components/common/EmptyState";
 import ReservationModal from "@/components/common/ReservationModal";
@@ -10,9 +11,11 @@ import useAuth from "@/hooks/useAuth";
 import { getReservations, updateReservationStatus } from "@/lib/reservations";
 
 function ReservationCard({ reservation, onCancel, cancelling }) {
+  const { t } = useTranslation();
+
   const dateTime =
     reservation.date && reservation.time
-      ? `${reservation.date} at ${reservation.time}`
+      ? `${reservation.date} ${t("reservations.at")} ${reservation.time}`
       : reservation.date || reservation.time || "";
 
   return (
@@ -20,7 +23,7 @@ function ReservationCard({ reservation, onCancel, cancelling }) {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-sm text-muted-foreground">
-            Reservation #{reservation.id}
+            {t("reservations.number", { id: reservation.id })}
           </p>
 
           {dateTime && (
@@ -34,17 +37,22 @@ function ReservationCard({ reservation, onCancel, cancelling }) {
       <div className="mt-4 border-t border-border pt-4">
         <dl className="grid gap-4 text-sm sm:grid-cols-2">
           <div>
-            <dt className="font-medium text-muted-foreground">Party size</dt>
+            <dt className="font-medium text-muted-foreground">
+              {t("reservations.partySize")}
+            </dt>
 
             <dd className="mt-0.5 font-semibold">
-              {reservation.partySize}{" "}
-              {reservation.partySize === 1 ? "guest" : "guests"}
+              {t("reservations.guests", {
+                count: reservation.partySize,
+              })}
             </dd>
           </div>
 
           {reservation.phone && (
             <div>
-              <dt className="font-medium text-muted-foreground">Phone</dt>
+              <dt className="font-medium text-muted-foreground">
+                {t("reservations.phone")}
+              </dt>
 
               <dd className="mt-0.5 font-semibold">{reservation.phone}</dd>
             </div>
@@ -52,7 +60,9 @@ function ReservationCard({ reservation, onCancel, cancelling }) {
 
           {reservation.notes && (
             <div className="sm:col-span-2">
-              <dt className="font-medium text-muted-foreground">Notes</dt>
+              <dt className="font-medium text-muted-foreground">
+                {t("reservations.notes")}
+              </dt>
 
               <dd className="mt-0.5">{reservation.notes}</dd>
             </div>
@@ -70,7 +80,10 @@ function ReservationCard({ reservation, onCancel, cancelling }) {
             onClick={() => onCancel(reservation.id)}
           >
             {cancelling && <Loader2 className="animate-spin" />}
-            {cancelling ? "Cancelling…" : "Cancel reservation"}
+
+            {cancelling
+              ? t("reservations.cancelling")
+              : t("reservations.cancel")}
           </Button>
         </div>
       )}
@@ -79,6 +92,7 @@ function ReservationCard({ reservation, onCancel, cancelling }) {
 }
 
 function ReservationsPage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
 
   const [reservations, setReservations] = useState(getReservations);
@@ -101,22 +115,24 @@ function ReservationsPage() {
 
     try {
       updateReservationStatus(id, "cancelled");
-      toast.success("Reservation cancelled");
+      toast.success(t("reservations.toast.cancelled"));
     } catch {
-      toast.error("Could not cancel the reservation. Please try again.");
+      toast.error(t("reservations.toast.cancelError"));
     } finally {
       setCancellingId(null);
     }
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">My reservations</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            {t("reservations.title")}
+          </h1>
 
           <p className="mt-1 text-muted-foreground">
-            Your upcoming and past table bookings.
+            {t("reservations.subtitle")}
           </p>
         </div>
 
@@ -124,7 +140,7 @@ function ReservationsPage() {
           trigger={
             <Button>
               <CalendarDays />
-              New reservation
+              {t("reservations.new")}
             </Button>
           }
         />
@@ -134,10 +150,12 @@ function ReservationsPage() {
         {reservations.length === 0 ? (
           <EmptyState
             icon={CalendarDays}
-            title="No reservations yet"
-            description="Book a table and it will appear here."
+            title={t("reservations.empty.title")}
+            description={t("reservations.empty.description")}
             action={
-              <ReservationModal trigger={<Button>Reserve a table</Button>} />
+              <ReservationModal
+                trigger={<Button>{t("reservations.empty.action")}</Button>}
+              />
             }
           />
         ) : (

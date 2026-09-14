@@ -1,5 +1,4 @@
 import {
-  ArrowRight,
   Cookie,
   CupSoda,
   Leaf,

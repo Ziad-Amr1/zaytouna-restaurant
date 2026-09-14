@@ -1,7 +1,8 @@
 {
   "common": {
     "retry": "حاول مرة أخرى",
-    "comingSoon": "قريبًا"
+    "comingSoon": "قريبًا",
+    "somethingWentWrong": "حدث خطأ ما"
   },
   "nav": {
     "home": "الرئيسية",
@@ -21,6 +22,26 @@
     "themeToLight": "التبديل إلى الوضع الفاتح",
     "themeToDark": "التبديل إلى الوضع الداكن",
     "language": "اللغة"
+  },
+  "admin": {
+    "mobileTitle": "إدارة زيتونة",
+    "navigationLabel": "قائمة الإدارة",
+    "navigationTitle": "قائمة الإدارة",
+    "navigationDescription": "تنقل بين أقسام لوحة الإدارة.",
+    "openMenu": "فتح قائمة الإدارة",
+    "brandSubtitle": "المطبخ الشامي والمشاوي",
+    "backToWebsite": "العودة إلى الموقع",
+    "defaultUser": "المسؤول",
+    "defaultRole": "مسؤول",
+    "signOut": "تسجيل الخروج",
+    "nav": {
+      "dashboard": "لوحة التحكم",
+      "menuManagement": "إدارة القائمة",
+      "orders": "الطلبات",
+      "reservations": "الحجوزات",
+      "usersRoles": "المستخدمون والأدوار",
+      "analytics": "التحليلات"
+    }
   },
   "menu": {
     "title": "قائمتنا",
@@ -110,6 +131,63 @@
       "emailLabel": "البريد الإلكتروني",
       "emailPlaceholder": "you@example.com",
       "subscribe": "اشترك"
+    }
+  },
+  "favorites": {
+    "title": "مفضلاتي",
+    "loading": "جارٍ تحميل الأطباق المحفوظة…",
+    "savedCount_one": "طبق محفوظ واحد",
+    "savedCount_other": "{{count}} أطباق محفوظة",
+    "error": "تعذر تحميل المفضلات الآن. يرجى المحاولة مرة أخرى.",
+    "empty": {
+      "title": "لا توجد مفضلات بعد",
+      "description": "اضغط على القلب بجانب أي طبق لحفظه هنا للعودة إليه لاحقًا.",
+      "action": "تصفح القائمة"
+    }
+  },
+  "orders": {
+    "title": "طلباتي",
+    "subtitle": "سجل بكل ما طلبته.",
+    "error": "تعذر تحميل طلباتك الآن. يرجى المحاولة مرة أخرى.",
+    "orderNumber": "الطلب #{{id}}",
+    "total": "الإجمالي",
+    "empty": {
+      "title": "لا توجد طلبات بعد",
+      "description": "عند تقديم طلب سيظهر هنا لتتمكن من متابعته.",
+      "action": "استكشف القائمة"
+    }
+  },
+  "profile": {
+    "title": "ملفي الشخصي",
+    "subtitle": "تفاصيل حسابك في مطعم زيتونة.",
+    "fullName": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "memberSince": "عضو منذ",
+    "viewOrders": "عرض طلباتي",
+    "browseMenu": "تصفح القائمة"
+  },
+  "reservations": {
+    "title": "حجوزاتي",
+    "subtitle": "حجوزات الطاولات القادمة والسابقة.",
+    "new": "حجز جديد",
+    "newTable": "احجز طاولة",
+    "number": "الحجز #{{id}}",
+    "at": "في",
+    "partySize": "عدد الأشخاص",
+    "guests_one": "ضيف واحد",
+    "guests_other": "{{count}} ضيوف",
+    "phone": "رقم الهاتف",
+    "notes": "ملاحظات",
+    "cancelling": "جارٍ الإلغاء…",
+    "cancel": "إلغاء الحجز",
+    "toast": {
+      "cancelled": "تم إلغاء الحجز",
+      "cancelError": "تعذر إلغاء الحجز. يرجى المحاولة مرة أخرى."
+    },
+    "empty": {
+      "title": "لا توجد حجوزات بعد",
+      "description": "احجز طاولة وستظهر هنا.",
+      "action": "احجز طاولة"
     }
   },
   "menuCategories": {

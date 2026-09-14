@@ -16,9 +16,9 @@ import ProtectedRoute from "@/routes/ProtectedRoute";
 import RoleGuard from "@/routes/RoleGuard";
 
 // Layouts
-import AuthLayout from "@/components/layouts/AuthLayout";
-import PublicLayout from "@/components/layouts/PublicLayout";
-import AdminLayout from "@/components/layouts/AdminLayout";
+import AuthLayout from "@/components/layouts/auth/AuthLayout";
+import PublicLayout from "@/components/layouts/public/PublicLayout";
+import AdminLayout from "@/components/layouts/admin/AdminLayout";
 
 // Admin Pages
 import DashboardOverview from "@/pages/admin/DashboardOverview";

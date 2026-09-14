@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { getMenuItem } from "@/api/menuApi";
 import EmptyState from "@/components/common/EmptyState";
@@ -10,6 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getFavorites } from "@/lib/favorites";
 
 function FavoritesPage() {
+  const { t } = useTranslation();
+
   const [dishes, setDishes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -46,9 +49,7 @@ function FavoritesPage() {
         }
 
         setDishes([]);
-        setError(
-          "We couldn't load your favorites right now. Please try again.",
-        );
+        setError(t("favorites.error"));
       } finally {
         if (!cancelled) {
           setLoading(false);
@@ -66,23 +67,22 @@ function FavoritesPage() {
 
     return () => {
       cancelled = true;
-
       window.removeEventListener("favorites:change", handleFavoritesChange);
     };
-  }, []);
+  }, [t]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-bold tracking-tight text-foreground">
-        My favorites
+        {t("favorites.title")}
       </h1>
 
       <p className="mt-1 text-muted-foreground">
         {loading ? (
-          "Loading your saved dishes…"
+          t("favorites.loading")
         ) : (
           <span aria-live="polite">
-            {dishes.length} saved {dishes.length === 1 ? "dish" : "dishes"}
+            {t("favorites.savedCount", { count: dishes.length })}
           </span>
         )}
       </p>
@@ -95,15 +95,18 @@ function FavoritesPage() {
             ))}
           </div>
         ) : error ? (
-          <EmptyState title="Something went wrong" description={error} />
+          <EmptyState
+            title={t("common.somethingWentWrong")}
+            description={error}
+          />
         ) : dishes.length === 0 ? (
           <EmptyState
             icon={Heart}
-            title="No favorites yet"
-            description="Tap the heart on any dish to save it here for next time."
+            title={t("favorites.empty.title")}
+            description={t("favorites.empty.description")}
             action={
               <Button asChild>
-                <Link to="/menu">Browse the menu</Link>
+                <Link to="/menu">{t("favorites.empty.action")}</Link>
               </Button>
             }
           />

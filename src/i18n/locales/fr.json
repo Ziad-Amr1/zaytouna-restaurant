@@ -1,7 +1,8 @@
 {
   "common": {
     "retry": "Réessayer",
-    "comingSoon": "Bientôt disponible"
+    "comingSoon": "Bientôt disponible",
+    "somethingWentWrong": "Une erreur s'est produite"
   },
   "nav": {
     "home": "Accueil",
@@ -21,6 +22,26 @@
     "themeToLight": "Passer au thème clair",
     "themeToDark": "Passer au thème sombre",
     "language": "Langue"
+  },
+  "admin": {
+    "mobileTitle": "Administration Zaytouna",
+    "navigationLabel": "Navigation d'administration",
+    "navigationTitle": "Navigation d'administration",
+    "navigationDescription": "Naviguez entre les sections de l'administration.",
+    "openMenu": "Ouvrir le menu d'administration",
+    "brandSubtitle": "Cuisine levantine & grillades",
+    "backToWebsite": "Retour au site",
+    "defaultUser": "Administrateur",
+    "defaultRole": "administrateur",
+    "signOut": "Se déconnecter",
+    "nav": {
+      "dashboard": "Tableau de bord",
+      "menuManagement": "Gestion du menu",
+      "orders": "Commandes",
+      "reservations": "Réservations",
+      "usersRoles": "Utilisateurs et rôles",
+      "analytics": "Analyses"
+    }
   },
   "menu": {
     "title": "Notre menu",
@@ -110,6 +131,63 @@
       "emailLabel": "Adresse e-mail",
       "emailPlaceholder": "vous@exemple.com",
       "subscribe": "S'abonner"
+    }
+  },
+  "favorites": {
+    "title": "Mes favoris",
+    "loading": "Chargement de vos plats enregistrés…",
+    "savedCount_one": "{{count}} plat enregistré",
+    "savedCount_other": "{{count}} plats enregistrés",
+    "error": "Impossible de charger vos favoris pour le moment. Veuillez réessayer.",
+    "empty": {
+      "title": "Aucun favori pour le moment",
+      "description": "Appuyez sur le cœur d'un plat pour l'enregistrer ici et le retrouver plus tard.",
+      "action": "Parcourir le menu"
+    }
+  },
+  "orders": {
+    "title": "Mes commandes",
+    "subtitle": "L'historique de toutes vos commandes.",
+    "error": "Impossible de charger vos commandes pour le moment. Veuillez réessayer.",
+    "orderNumber": "Commande n°{{id}}",
+    "total": "Total",
+    "empty": {
+      "title": "Aucune commande pour le moment",
+      "description": "Lorsque vous passerez une commande, elle apparaîtra ici pour vous permettre de la suivre.",
+      "action": "Explorer le menu"
+    }
+  },
+  "profile": {
+    "title": "Mon profil",
+    "subtitle": "Les informations de votre compte chez Zaytouna Restaurant.",
+    "fullName": "Nom complet",
+    "email": "E-mail",
+    "memberSince": "Membre depuis",
+    "viewOrders": "Voir mes commandes",
+    "browseMenu": "Parcourir le menu"
+  },
+  "reservations": {
+    "title": "Mes réservations",
+    "subtitle": "Vos réservations de table à venir et passées.",
+    "new": "Nouvelle réservation",
+    "newTable": "Réserver une table",
+    "number": "Réservation n°{{id}}",
+    "at": "à",
+    "partySize": "Nombre de personnes",
+    "guests_one": "{{count}} personne",
+    "guests_other": "{{count}} personnes",
+    "phone": "Téléphone",
+    "notes": "Notes",
+    "cancelling": "Annulation…",
+    "cancel": "Annuler la réservation",
+    "toast": {
+      "cancelled": "Réservation annulée",
+      "cancelError": "Impossible d'annuler la réservation. Veuillez réessayer."
+    },
+    "empty": {
+      "title": "Aucune réservation pour le moment",
+      "description": "Réservez une table et elle apparaîtra ici.",
+      "action": "Réserver une table"
     }
   },
   "menuCategories": {
