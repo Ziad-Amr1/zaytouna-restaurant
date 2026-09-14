@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "id": "admin-001",
+    "name": "Admin",
+    "email": "admin@techmaster.com",
+    "password": "$2a$10$/1hFcRRqwz0gwaRAcoWpdOKL3tCWr0Mvpb9HNt5A8szmI0ursWF9y",
+    "role": "admin",
+    "createdAt": "2024-01-01T00:00:00.000Z"
+  }
+]
