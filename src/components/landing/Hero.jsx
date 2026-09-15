@@ -7,12 +7,12 @@ export default function Hero() {
   const { t } = useTranslation();
 
   return (
-    <section className="relative flex min-h-[calc(100vh-4rem)] items-center border-b bg-muted/30 py-6 sm:py-8 lg:py-0">
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+    <section className="relative flex min-h-[calc(100vh-4rem)] items-center border-b bg-muted/30 pt-1.5 pb-6 sm:py-8 lg:py-0">
+      <div className="mx-auto w-full max-w-6xl px-3 sm:px-6 lg:px-8">
         {/* Mobile-Dedicated Hero View (< md breakpoint) */}
-        <div className="relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border bg-card shadow-xl md:hidden">
+        <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card shadow-lg md:hidden">
           {/* Hero Food Image Banner with Overlay Scrim */}
-          <div className="relative h-64 w-full overflow-hidden">
+          <div className="relative h-48 w-full overflow-hidden">
             <img
               src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80"
               alt="Zaytouna Mediterranean Gourmet Cuisine"
@@ -22,35 +22,35 @@ export default function Hero() {
             <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
 
             {/* Floating Rating Pill */}
-            <div className="absolute top-3.5 start-3.5 flex items-center gap-1.5 rounded-full border border-white/20 bg-black/60 px-3 py-1 text-xs font-bold text-white backdrop-blur-md shadow-md">
+            <div className="absolute top-2.5 start-2.5 flex items-center gap-1 rounded-full border border-white/20 bg-black/60 px-2.5 py-0.5 text-[11px] font-bold text-white backdrop-blur-md shadow-xs">
               <span className="text-amber-400">★</span> 4.9
-              <span className="text-[10px] text-white/80 font-normal">(2.4k+ reviews)</span>
+              <span className="text-[10px] text-white/80 font-normal">(2.4k+)</span>
             </div>
 
             {/* Open Now Live Status Badge */}
-            <div className="absolute top-3.5 end-3.5 flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-950/80 px-2.5 py-1 text-[11px] font-bold text-emerald-400 backdrop-blur-md">
-              <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="absolute top-2.5 end-2.5 flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-950/80 px-2 py-0.5 text-[10px] font-bold text-emerald-400 backdrop-blur-md">
+              <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>Open Now</span>
             </div>
           </div>
 
           {/* Hero Content Section */}
-          <div className="relative -mt-6 px-5 pb-6 pt-1 flex flex-col space-y-4 bg-card rounded-t-3xl">
+          <div className="relative -mt-5 px-4 pb-4 pt-1 flex flex-col space-y-3 bg-card rounded-t-2xl">
             <div>
-              <span className="inline-block text-[11px] font-extrabold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-0.5 rounded-md">
+              <span className="inline-block text-[10px] font-extrabold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-md">
                 {t("landing.tagline")}
               </span>
-              <h1 className="mt-2 text-2xl font-black leading-tight text-foreground sm:text-3xl">
+              <h1 className="mt-1.5 text-xl font-black leading-tight text-foreground sm:text-2xl">
                 {t("landing.title")}
               </h1>
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground line-clamp-3">
+              <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground line-clamp-2">
                 {t("landing.description")}
               </p>
             </div>
 
             {/* Action Buttons Stack */}
-            <div className="space-y-2.5 pt-1">
-              <Button asChild size="lg" className="w-full rounded-2xl font-bold shadow-md">
+            <div className="space-y-2 pt-0.5">
+              <Button asChild size="default" className="w-full h-10 rounded-xl font-bold text-xs shadow-xs">
                 <Link to="/menu">
                   {t("landing.browseMenu")}
                 </Link>
@@ -60,8 +60,8 @@ export default function Hero() {
                 trigger={
                   <Button
                     variant="outline"
-                    size="lg"
-                    className="w-full rounded-2xl font-semibold border-border bg-background"
+                    size="default"
+                    className="w-full h-10 rounded-xl font-semibold text-xs border-border bg-background"
                   >
                     {t("landing.reserveTable")}
                   </Button>
@@ -70,10 +70,10 @@ export default function Hero() {
             </div>
 
             {/* Feature Highlights Row */}
-            <div className="pt-3 flex items-center justify-between text-[11px] font-medium text-muted-foreground border-t border-border/60">
-              <span className="flex items-center gap-1">⚡ Fast Delivery</span>
-              <span className="flex items-center gap-1">🌿 100% Fresh</span>
-              <span className="flex items-center gap-1">🏆 Award Winning</span>
+            <div className="pt-2 flex items-center justify-between text-[10px] font-medium text-muted-foreground border-t border-border/50">
+              <span className="flex items-center gap-0.5">⚡ Fast Delivery</span>
+              <span className="flex items-center gap-0.5">🌿 100% Fresh</span>
+              <span className="flex items-center gap-0.5">🏆 Award Winning</span>
             </div>
           </div>
         </div>
