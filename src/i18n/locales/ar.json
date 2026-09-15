@@ -137,7 +137,9 @@
     "soldOut": "نفذت الكمية",
     "addedToCart": "تمت إضافة {{name}} إلى سلتك",
     "addFavorite": "إضافة {{name}} للمفضلة",
-    "removeFavorite": "إزالة {{name}} من المفضلة"
+    "removeFavorite": "إزالة {{name}} من المفضلة",
+    "addedToFavorites": "تمت إضافة {{name}} إلى المفضلة",
+    "removedFromFavorites": "تمت إزالة {{name}} من المفضلة"
   },
   "cart": {
     "title": "سلة التسوق",

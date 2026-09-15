@@ -129,7 +129,9 @@
     "soldOut": "Sold out",
     "addedToCart": "{{name}} added to your cart",
     "addFavorite": "Add {{name}} to favorites",
-    "removeFavorite": "Remove {{name}} from favorites"
+    "removeFavorite": "Remove {{name}} from favorites",
+    "addedToFavorites": "{{name}} added to your favorites",
+    "removedFromFavorites": "{{name}} removed from your favorites"
   },
   "cart": {
     "title": "Your cart",

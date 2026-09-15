@@ -129,7 +129,9 @@
     "soldOut": "Épuisé",
     "addedToCart": "{{name}} ajouté à votre panier",
     "addFavorite": "Ajouter {{name}} aux favoris",
-    "removeFavorite": "Retirer {{name}} des favoris"
+    "removeFavorite": "Retirer {{name}} des favoris",
+    "addedToFavorites": "{{name}} ajouté à vos favoris",
+    "removedFromFavorites": "{{name}} retiré de vos favoris"
   },
   "cart": {
     "title": "Votre panier",
