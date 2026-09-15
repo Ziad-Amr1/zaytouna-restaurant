@@ -42,20 +42,21 @@ export function dishToLine(dish) {
   };
 }
 
-export function addDish(cart, dish) {
+export function addDish(cart, dish, quantityToAdd = 1) {
   if (!dish?.id) return cart;
 
+  const qty = Math.max(1, Math.floor(Number(quantityToAdd) || 1));
   const line = dishToLine(dish);
   const existing = cart.items.find((item) => item.id === line.id);
 
   if (existing) {
     const lines = cart.items.map((item) =>
-      item.id === line.id ? { ...item, quantity: item.quantity + 1 } : item,
+      item.id === line.id ? { ...item, quantity: item.quantity + qty } : item,
     );
     return computeTotals(lines);
   }
 
-  return computeTotals([...cart.items, line]);
+  return computeTotals([...cart.items, { ...line, quantity: qty }]);
 }
 
 export function setCartQuantity(cart, dishId, quantity) {
