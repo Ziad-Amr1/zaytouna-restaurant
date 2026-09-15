@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, Heart, Loader2, Minus, Plus } from "lucide-react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -64,13 +64,16 @@ function DishDetailsPage() {
     navigate(from || "/menu");
   };
 
+  const isSubmittingRef = useRef(false);
+
   const handleOrder = async () => {
     if (!isAuthenticated) {
       navigate("/login", { state: { from: location.pathname } });
       return;
     }
-    if (!dish || placing) return;
+    if (!dish || placing || isSubmittingRef.current) return;
 
+    isSubmittingRef.current = true;
     setPlacing(true);
     try {
       await createOrder([{ menuItemId: dish.id, quantity }]);
@@ -87,6 +90,7 @@ function DishDetailsPage() {
       );
     } finally {
       setPlacing(false);
+      isSubmittingRef.current = false;
     }
   };
 

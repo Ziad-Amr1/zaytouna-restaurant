@@ -1,20 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { getCurrentUser, loginUser, registerUser } from "@/api/authApi";
+import { storage } from "@/lib/storage";
 
 import AuthContext from "./AuthContext";
 
 function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => storage.getJSON("user", null));
 
   const [isLoading, setIsLoading] = useState(() => {
-    return Boolean(localStorage.getItem("token"));
+    return Boolean(storage.getItem("token"));
   });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = storage.getItem("token");
 
     if (!token) {
+      setIsLoading(false);
       return;
     }
 
@@ -31,18 +33,19 @@ function AuthProvider({ children }) {
 
         if (currentUser) {
           setUser(currentUser);
-          localStorage.setItem("user", JSON.stringify(currentUser));
+          storage.setItem("user", currentUser);
         } else {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
+          storage.removeItem("token");
+          storage.removeItem("user");
+          setUser(null);
         }
       } catch {
         if (cancelled) {
           return;
         }
 
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        storage.removeItem("token");
+        storage.removeItem("user");
         setUser(null);
       } finally {
         if (!cancelled) {
@@ -51,7 +54,7 @@ function AuthProvider({ children }) {
       }
     }
 
-    restoreSession();
+    void restoreSession();
 
     return () => {
       cancelled = true;
@@ -60,8 +63,8 @@ function AuthProvider({ children }) {
 
   useEffect(() => {
     function handleUnauthorized() {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      storage.removeItem("token");
+      storage.removeItem("user");
       setUser(null);
       setIsLoading(false);
     }
@@ -81,8 +84,8 @@ function AuthProvider({ children }) {
       throw new Error("Invalid login response from server.");
     }
 
-    localStorage.setItem("token", session.token);
-    localStorage.setItem("user", JSON.stringify(session.user));
+    storage.setItem("token", session.token);
+    storage.setItem("user", session.user);
 
     setUser(session.user);
 
@@ -97,8 +100,8 @@ function AuthProvider({ children }) {
       throw new Error("Invalid registration response from server.");
     }
 
-    localStorage.setItem("token", session.token);
-    localStorage.setItem("user", JSON.stringify(session.user));
+    storage.setItem("token", session.token);
+    storage.setItem("user", session.user);
 
     setUser(session.user);
 
@@ -106,8 +109,8 @@ function AuthProvider({ children }) {
   }
 
   function logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    storage.removeItem("token");
+    storage.removeItem("user");
     setUser(null);
   }
 

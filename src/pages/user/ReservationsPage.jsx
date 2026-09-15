@@ -95,13 +95,15 @@ function ReservationsPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
 
-  const [reservations, setReservations] = useState(getReservations);
+  const [reservations, setReservations] = useState(() => getReservations(user?.id));
   const [cancellingId, setCancellingId] = useState(null);
 
   useEffect(() => {
     function handleChange() {
-      setReservations(getReservations());
+      setReservations(getReservations(user?.id));
     }
+
+    setReservations(getReservations(user?.id));
 
     window.addEventListener("reservations:change", handleChange);
 

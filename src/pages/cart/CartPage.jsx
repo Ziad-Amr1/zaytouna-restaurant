@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -55,14 +55,17 @@ function CartPage() {
     toast.success(t("cart.cleared"));
   }
 
+  const isSubmittingRef = useRef(false);
+
   async function handleCheckout() {
     if (!isAuthenticated) {
       navigate("/login", { state: { from: "/cart" } });
       return;
     }
 
-    if (placing || cart.items.length === 0) return;
+    if (placing || isSubmittingRef.current || cart.items.length === 0) return;
 
+    isSubmittingRef.current = true;
     setPlacing(true);
     try {
       await createOrder(
@@ -81,6 +84,7 @@ function CartPage() {
       toast.error(err.response?.data?.message || t("cart.orderFailed"));
     } finally {
       setPlacing(false);
+      isSubmittingRef.current = false;
     }
   }
 
