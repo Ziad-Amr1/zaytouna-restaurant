@@ -68,16 +68,12 @@ const INITIAL_USERS = [
 ];
 
 export function getUsers() {
-  const stored = safeStorage.get("zaytouna_users");
-  if (!stored) {
-    safeStorage.set("zaytouna_users", JSON.stringify(INITIAL_USERS));
+  const users = safeStorage.getJSON("zaytouna_users", null);
+  if (!users || !Array.isArray(users) || users.length === 0) {
+    safeStorage.setJSON("zaytouna_users", INITIAL_USERS);
     return INITIAL_USERS;
   }
-  try {
-    return JSON.parse(stored);
-  } catch {
-    return INITIAL_USERS;
-  }
+  return users;
 }
 
 export function updateUserRole(userId, newRole) {
@@ -85,7 +81,7 @@ export function updateUserRole(userId, newRole) {
   const updated = users.map((u) =>
     u.id === userId ? { ...u, role: newRole } : u
   );
-  safeStorage.set("zaytouna_users", JSON.stringify(updated));
+  safeStorage.setJSON("zaytouna_users", updated);
   window.dispatchEvent(new Event("users:change"));
   return updated;
 }
@@ -95,7 +91,7 @@ export function updateUserStatus(userId, newStatus) {
   const updated = users.map((u) =>
     u.id === userId ? { ...u, status: newStatus } : u
   );
-  safeStorage.set("zaytouna_users", JSON.stringify(updated));
+  safeStorage.setJSON("zaytouna_users", updated);
   window.dispatchEvent(new Event("users:change"));
   return updated;
 }

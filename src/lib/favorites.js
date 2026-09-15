@@ -1,16 +1,13 @@
+import safeStorage from "./storage";
+
 const STORAGE_KEY = "zaytouna.favorites";
 
 function readFavorites() {
-  try {
-    const value = localStorage.getItem(STORAGE_KEY);
-    return value ? JSON.parse(value) : [];
-  } catch {
-    return [];
-  }
+  return safeStorage.getJSON(STORAGE_KEY, []);
 }
 
 function saveFavorites(ids) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+  safeStorage.setJSON(STORAGE_KEY, ids);
 }
 
 export function getFavorites() {

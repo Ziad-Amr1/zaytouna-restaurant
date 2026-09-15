@@ -12,3 +12,14 @@ export function getUserAvatar(user) {
   const meta = safeStorage.getJSON(`profile_meta_${user.id}`, null);
   return meta?.avatarUrl || "";
 }
+
+export function getInitials(name) {
+  return (name || "?")
+    .trim()
+    .split(/\s+/)
+    .map((part) => part[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}

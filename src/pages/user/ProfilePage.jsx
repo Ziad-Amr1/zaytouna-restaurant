@@ -41,17 +41,7 @@ import useAuth from "@/hooks/useAuth";
 import { getReservations } from "@/lib/reservations";
 import { getFavorites } from "@/lib/favorites";
 import safeStorage from "@/lib/storage";
-import { cn } from "@/lib/utils";
-
-function getInitials(name) {
-  return (name || "?")
-    .split(" ")
-    .map((part) => part[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
+import { cn, getInitials } from "@/lib/utils";
 
 const AVATAR_PRESETS = [
   { id: "admin-default", label: "Admin", url: "https://tse1.mm.bing.net/th/id/OIP.ycMiltiCgaZAx-9dVJmlYwHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" },

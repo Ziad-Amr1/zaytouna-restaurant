@@ -97,7 +97,7 @@ function UserFormDialog({ open, onOpenChange, user, onSaved }) {
       toast.success("New user created successfully");
     }
 
-    safeStorage.set("zaytouna_users", JSON.stringify(updated));
+    safeStorage.setJSON("zaytouna_users", updated);
     window.dispatchEvent(new Event("users:change"));
     onSaved();
     onOpenChange(false);
@@ -245,7 +245,7 @@ export default function UsersManagement() {
 
   const handleDeleteUser = (userId, userName) => {
     const updated = users.filter((u) => u.id !== userId);
-    safeStorage.set("zaytouna_users", JSON.stringify(updated));
+    safeStorage.setJSON("zaytouna_users", updated);
     window.dispatchEvent(new Event("users:change"));
     toast.success(`User "${userName}" was removed`);
   };
