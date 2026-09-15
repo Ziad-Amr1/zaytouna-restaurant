@@ -1,1 +1,115 @@
-[]
+[
+  {
+    "id": "ORD-1001",
+    "userId": "user-002",
+    "userName": "Sarah Ahmed",
+    "userEmail": "user@techmaster.com",
+    "items": [
+      { "id": "1", "name": "Chicken Shawarma Wrap", "price": 96, "quantity": 2, "lineTotal": 192 },
+      { "id": "18", "name": "Fresh Mango Nectar", "price": 40, "quantity": 2, "lineTotal": 80 }
+    ],
+    "total": 272,
+    "status": "completed",
+    "paymentMethod": "Credit Card",
+    "createdAt": "2026-09-14T18:30:00.000Z"
+  },
+  {
+    "id": "ORD-1002",
+    "userId": "user-005",
+    "userName": "Youssef Ali",
+    "userEmail": "youssef@example.com",
+    "items": [
+      { "id": "3", "name": "Mixed Grill Royal Platter", "price": 272, "quantity": 1, "lineTotal": 272 },
+      { "id": "10", "name": "Levantine Fattoush Salad", "price": 55, "quantity": 1, "lineTotal": 55 },
+      { "id": "19", "name": "Iced Mint Lemonade", "price": 35, "quantity": 2, "lineTotal": 70 }
+    ],
+    "total": 397,
+    "status": "completed",
+    "paymentMethod": "Cash on Delivery",
+    "createdAt": "2026-09-14T20:15:00.000Z"
+  },
+  {
+    "id": "ORD-1003",
+    "userId": "staff-003",
+    "userName": "Karim Hassan",
+    "userEmail": "staff@techmaster.com",
+    "items": [
+      { "id": "6", "name": "Molokhia with Roasted Chicken", "price": 210, "quantity": 2, "lineTotal": 420 },
+      { "id": "15", "name": "Umm Ali Supreme", "price": 60, "quantity": 2, "lineTotal": 120 }
+    ],
+    "total": 540,
+    "status": "processing",
+    "paymentMethod": "Credit Card",
+    "createdAt": "2026-09-15T01:10:00.000Z"
+  },
+  {
+    "id": "ORD-1004",
+    "userId": "user-002",
+    "userName": "Sarah Ahmed",
+    "userEmail": "user@techmaster.com",
+    "items": [
+      { "id": "16", "name": "Pistachio Cream Kunafa", "price": 77, "quantity": 2, "lineTotal": 154 },
+      { "id": "12", "name": "Crispy Cheese Sambousek", "price": 70, "quantity": 1, "lineTotal": 70 }
+    ],
+    "total": 224,
+    "status": "pending",
+    "paymentMethod": "Credit Card",
+    "createdAt": "2026-09-15T02:45:00.000Z"
+  },
+  {
+    "id": "ORD-1005",
+    "userId": "admin-001",
+    "userName": "Admin User",
+    "userEmail": "admin@techmaster.com",
+    "items": [
+      { "id": "4", "name": "Charcoal Beef Kofta", "price": 180, "quantity": 2, "lineTotal": 360 },
+      { "id": "1", "name": "Chicken Shawarma Wrap", "price": 96, "quantity": 1, "lineTotal": 96 }
+    ],
+    "total": 456,
+    "status": "completed",
+    "paymentMethod": "Credit Card",
+    "createdAt": "2026-09-13T19:20:00.000Z"
+  },
+  {
+    "id": "ORD-1006",
+    "userId": "user-005",
+    "userName": "Youssef Ali",
+    "userEmail": "youssef@example.com",
+    "items": [
+      { "id": "7", "name": "Egyptian Stuffed Pigeon (Hamam)", "price": 234, "quantity": 2, "lineTotal": 468 },
+      { "id": "8", "name": "Classic Creamy Hummus", "price": 60, "quantity": 1, "lineTotal": 60 }
+    ],
+    "total": 528,
+    "status": "completed",
+    "paymentMethod": "Credit Card",
+    "createdAt": "2026-09-12T13:40:00.000Z"
+  },
+  {
+    "id": "ORD-1007",
+    "userId": "chef-004",
+    "userName": "Chef Omar Zaki",
+    "userEmail": "chef@techmaster.com",
+    "items": [
+      { "id": "5", "name": "Shish Taouk Skewers", "price": 195, "quantity": 3, "lineTotal": 585 },
+      { "id": "14", "name": "Egyptian Crispy Hawawshi", "price": 110, "quantity": 2, "lineTotal": 220 }
+    ],
+    "total": 805,
+    "status": "completed",
+    "paymentMethod": "Credit Card",
+    "createdAt": "2026-09-11T20:00:00.000Z"
+  },
+  {
+    "id": "ORD-1008",
+    "userId": "user-002",
+    "userName": "Sarah Ahmed",
+    "userEmail": "user@techmaster.com",
+    "items": [
+      { "id": "2", "name": "Koshari Deluxe", "price": 65, "quantity": 3, "lineTotal": 195 },
+      { "id": "20", "name": "Chilled Egyptian Karkade", "price": 30, "quantity": 3, "lineTotal": 90 }
+    ],
+    "total": 285,
+    "status": "completed",
+    "paymentMethod": "Cash on Delivery",
+    "createdAt": "2026-09-10T14:15:00.000Z"
+  }
+]

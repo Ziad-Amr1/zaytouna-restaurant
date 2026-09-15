@@ -1,10 +1,74 @@
 [
   {
     "id": "admin-001",
-    "name": "Admin",
+    "name": "Admin User",
     "email": "admin@techmaster.com",
     "password": "$2a$10$/1hFcRRqwz0gwaRAcoWpdOKL3tCWr0Mvpb9HNt5A8szmI0ursWF9y",
     "role": "admin",
+    "status": "active",
     "createdAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "user-002",
+    "name": "Sarah Ahmed",
+    "email": "user@techmaster.com",
+    "password": "$2a$10$/1hFcRRqwz0gwaRAcoWpdOKL3tCWr0Mvpb9HNt5A8szmI0ursWF9y",
+    "role": "user",
+    "status": "active",
+    "createdAt": "2024-02-10T12:30:00.000Z"
+  },
+  {
+    "id": "staff-003",
+    "name": "Karim Hassan",
+    "email": "staff@techmaster.com",
+    "password": "$2a$10$/1hFcRRqwz0gwaRAcoWpdOKL3tCWr0Mvpb9HNt5A8szmI0ursWF9y",
+    "role": "staff",
+    "status": "active",
+    "createdAt": "2024-03-05T09:15:00.000Z"
+  },
+  {
+    "id": "chef-004",
+    "name": "Chef Omar Zaki",
+    "email": "chef@techmaster.com",
+    "password": "$2a$10$/1hFcRRqwz0gwaRAcoWpdOKL3tCWr0Mvpb9HNt5A8szmI0ursWF9y",
+    "role": "staff",
+    "status": "active",
+    "createdAt": "2024-03-12T14:20:00.000Z"
+  },
+  {
+    "id": "user-005",
+    "name": "Youssef Ali",
+    "email": "youssef@example.com",
+    "password": "$2a$10$/1hFcRRqwz0gwaRAcoWpdOKL3tCWr0Mvpb9HNt5A8szmI0ursWF9y",
+    "role": "user",
+    "status": "active",
+    "createdAt": "2024-04-01T18:45:00.000Z"
+  },
+  {
+    "id": "user-006",
+    "name": "Noha Mahmoud",
+    "email": "noha@example.com",
+    "password": "$2a$10$/1hFcRRqwz0gwaRAcoWpdOKL3tCWr0Mvpb9HNt5A8szmI0ursWF9y",
+    "role": "user",
+    "status": "active",
+    "createdAt": "2024-05-15T11:20:00.000Z"
+  },
+  {
+    "id": "user-007",
+    "name": "Tarek Mansour",
+    "email": "tarek@example.com",
+    "password": "$2a$10$/1hFcRRqwz0gwaRAcoWpdOKL3tCWr0Mvpb9HNt5A8szmI0ursWF9y",
+    "role": "user",
+    "status": "active",
+    "createdAt": "2024-06-20T16:10:00.000Z"
+  },
+  {
+    "id": "admin-008",
+    "name": "Mona Ibrahim",
+    "email": "manager@techmaster.com",
+    "password": "$2a$10$/1hFcRRqwz0gwaRAcoWpdOKL3tCWr0Mvpb9HNt5A8szmI0ursWF9y",
+    "role": "admin",
+    "status": "active",
+    "createdAt": "2024-07-01T08:00:00.000Z"
   }
 ]
