@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { getCurrentUser, loginUser, registerUser } from "@/api/authApi";
 import { storage } from "@/lib/storage";
@@ -114,6 +114,17 @@ function AuthProvider({ children }) {
     setUser(null);
   }
 
+  const updateUser = useCallback(
+    (updatedFields) => {
+      setUser((prevUser) => {
+        const updatedUser = { ...prevUser, ...updatedFields };
+        storage.setItem("user", updatedUser);
+        return updatedUser;
+      });
+    },
+    [],
+  );
+
   const value = useMemo(
     () => ({
       user,
@@ -122,8 +133,9 @@ function AuthProvider({ children }) {
       login,
       register,
       logout,
+      updateUser,
     }),
-    [user, isLoading],
+    [user, isLoading, updateUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

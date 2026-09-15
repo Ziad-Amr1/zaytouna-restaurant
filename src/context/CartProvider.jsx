@@ -12,8 +12,8 @@ import {
 function CartProvider({ children }) {
   const [cart, setCart] = useState(loadCart);
 
-  const addItem = useCallback((dish) => {
-    setCart((current) => saveCart(addDish(current, dish)));
+  const addItem = useCallback((dish, quantity = 1) => {
+    setCart((current) => saveCart(addDish(current, dish, quantity)));
   }, []);
 
   const updateQuantity = useCallback((dishId, quantity) => {
