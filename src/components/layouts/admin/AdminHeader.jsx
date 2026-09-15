@@ -8,7 +8,7 @@ export default function AdminHeader() {
   const { t } = useTranslation();
 
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-card px-4 md:px-8">
+    <header className="sticky top-0 z-20 flex h-16 shrink-0 items-center justify-between border-b border-border bg-card/90 backdrop-blur-md px-4 md:px-8 shadow-2xs">
       <span className="text-sm font-bold text-foreground md:hidden">
         {t("admin.mobileTitle")}
       </span>

@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useForm, Controller, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, Pencil, Plus, RefreshCcw, Search, Trash2 } from "lucide-react";
+import { Loader2, Pencil, Plus, RefreshCcw, Search, Trash2, Utensils } from "lucide-react";
 import { toast } from "sonner";
 
 import { createMenuItem, deleteMenuItem, getMenuItems, updateMenuItem } from "@/api/menuApi";
@@ -58,6 +58,7 @@ function blankDishValues() {
     name: "",
     category: "Main Course",
     price: "",
+    discountPercent: "0",
     description: "",
     image: "",
     available: true,
@@ -70,6 +71,11 @@ const dishSchema = z.object({
   price: z.coerce
     .number({ invalid_type_error: "Price must be a number." })
     .positive("Price must be greater than zero."),
+  discountPercent: z.coerce
+    .number()
+    .min(0, "Discount cannot be negative")
+    .max(100, "Discount cannot exceed 100%")
+    .optional(),
   description: z.string().trim().optional(),
   image: z.string().trim().optional(),
   available: z.boolean(),
@@ -89,11 +95,14 @@ function DishFormDialog({ open, onOpenChange, categories, item, onSaved }) {
     defaultValues: blankDishValues(),
   });
 
+  const imageUrl = useWatch({ control, name: "image" });
+
   useEffect(() => {
     reset({
       name: item?.name || "",
       category: item?.category || "Main Course",
       price: item?.price ?? "",
+      discountPercent: item?.discountPercent ?? 0,
       description: item?.description || "",
       image: item?.image || "",
       available: item ? item.available !== false : true,
@@ -106,6 +115,7 @@ function DishFormDialog({ open, onOpenChange, categories, item, onSaved }) {
         name: values.name,
         category: values.category,
         price: values.price,
+        discountPercent: Number(values.discountPercent || 0),
         description: values.description || "",
         image: values.image || "",
         available: values.available,
@@ -125,11 +135,11 @@ function DishFormDialog({ open, onOpenChange, categories, item, onSaved }) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="rounded-2xl max-h-[90vh] overflow-y-auto sm:max-w-lg">
+      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-2xl sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>{editing ? "Edit dish" : "Add new dish"}</DialogTitle>
           <DialogDescription>
-            {editing ? "Update this dish's details." : "Add a new dish to the menu."}
+            {editing ? "Update this dish's details, price, and discount." : "Add a new dish to the menu."}
           </DialogDescription>
         </DialogHeader>
 
@@ -149,8 +159,8 @@ function DishFormDialog({ open, onOpenChange, categories, item, onSaved }) {
             {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="space-y-2 sm:col-span-1">
               <Label htmlFor="dish-category">Category</Label>
               <Controller
                 name="category"
@@ -171,7 +181,7 @@ function DishFormDialog({ open, onOpenChange, categories, item, onSaved }) {
                 )}
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 sm:col-span-1">
               <Label htmlFor="dish-price">Price (EGP)</Label>
               <Input
                 id="dish-price"
@@ -184,11 +194,41 @@ function DishFormDialog({ open, onOpenChange, categories, item, onSaved }) {
               />
               {errors.price && <p className="text-sm text-destructive">{errors.price.message}</p>}
             </div>
+            <div className="space-y-2 sm:col-span-1">
+              <Label htmlFor="dish-discount">Discount %</Label>
+              <Input
+                id="dish-discount"
+                type="number"
+                min="0"
+                max="100"
+                step="5"
+                className="h-11"
+                {...register("discountPercent")}
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="dish-image">Image URL</Label>
-            <Input id="dish-image" type="url" className="h-11" {...register("image")} />
+            <Input
+              id="dish-image"
+              type="url"
+              placeholder="https://images.unsplash.com/..."
+              className="h-11"
+              {...register("image")}
+            />
+            {imageUrl && (
+              <div className="relative mt-2 aspect-video w-full overflow-hidden rounded-xl border border-border bg-muted">
+                <img
+                  src={imageUrl}
+                  alt="Preview"
+                  className="size-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -253,7 +293,11 @@ export default function MenuManagement() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
+  const [filterStatus, setFilterStatus] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortColumn, setSortColumn] = useState("name");
+  const [sortDirection, setSortDirection] = useState("asc");
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
 
@@ -275,9 +319,9 @@ export default function MenuManagement() {
     void load();
   }, [load]);
 
-  const categories = [
-    ...new Set([...DEFAULT_CATEGORIES, ...items.map((item) => item.category).filter(Boolean)]),
-  ];
+  const categories = useMemo(() => {
+    return [...new Set([...DEFAULT_CATEGORIES, ...items.map((item) => item.category).filter(Boolean)])];
+  }, [items]);
 
   const replaceItem = (updated) => {
     setItems((prev) => {
@@ -308,28 +352,94 @@ export default function MenuManagement() {
     }
   };
 
-  const filteredItems = items.filter((item) => {
-    const matchesCategory = filterCategory === "All" || item.category === filterCategory;
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const handleSort = (columnKey) => {
+    if (sortColumn === columnKey) {
+      setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortColumn(columnKey);
+      setSortDirection("asc");
+    }
+  };
+
+  const filteredAndSortedItems = useMemo(() => {
+    return items
+      .filter((item) => {
+        const matchesCategory = filterCategory === "All" || item.category === filterCategory;
+        const matchesStatus =
+          filterStatus === "All" ||
+          (filterStatus === "available" && item.available !== false) ||
+          (filterStatus === "sold_out" && item.available === false);
+        const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCategory && matchesStatus && matchesSearch;
+      })
+      .sort((a, b) => {
+        let aVal = a[sortColumn];
+        let bVal = b[sortColumn];
+
+        if (sortColumn === "available") {
+          aVal = a.available !== false ? 1 : 0;
+          bVal = b.available !== false ? 1 : 0;
+        } else if (typeof aVal === "string") {
+          aVal = aVal.toLowerCase();
+          bVal = (bVal || "").toLowerCase();
+        }
+
+        if (aVal < bVal) return sortDirection === "asc" ? -1 : 1;
+        if (aVal > bVal) return sortDirection === "asc" ? 1 : -1;
+        return 0;
+      });
+  }, [items, filterCategory, filterStatus, searchQuery, sortColumn, sortDirection]);
 
   const columns = [
-    { header: "Item Name", accessor: "name" },
-    { header: "Category", accessor: "category" },
+    {
+      header: "Meal",
+      accessor: "name",
+      sortable: true,
+      render: (row) => (
+        <div className="flex items-center gap-3">
+          <div className="relative size-10 shrink-0 overflow-hidden rounded-xl border border-border bg-muted">
+            {row.image ? (
+              <img
+                src={row.image}
+                alt={row.name}
+                className="size-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+            ) : (
+              <div className="flex size-full items-center justify-center text-muted-foreground">
+                <Utensils className="size-4" />
+              </div>
+            )}
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">{row.name}</p>
+            {row.description && (
+              <p className="line-clamp-1 text-xs text-muted-foreground max-w-xs">
+                {row.description}
+              </p>
+            )}
+          </div>
+        </div>
+      ),
+    },
+    { header: "Category", accessor: "category", sortable: true },
     {
       header: "Price",
       accessor: "price",
+      sortable: true,
       render: (row) => formatPrice(row.price),
     },
     {
       header: "Availability",
       accessor: "available",
+      sortable: true,
       render: (row) =>
         row.available === false ? (
           <Badge variant="secondary">Sold out</Badge>
         ) : (
-          <Badge className="bg-emerald-500/10 text-emerald-700 border-emerald-500/20">Available</Badge>
+          <Badge className="border-emerald-500/20 bg-emerald-500/10 text-emerald-700">Available</Badge>
         ),
     },
     {
@@ -408,17 +518,13 @@ export default function MenuManagement() {
         )}
       </div>
 
-      <div className="flex flex-col gap-4 sm:flex-row">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <div className="relative flex-1">
           <Search
             className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
             aria-hidden="true"
           />
-          <label htmlFor="admin-menu-search" className="sr-only">
-            Search dish name
-          </label>
           <Input
-            id="admin-menu-search"
             type="search"
             placeholder="Search dish name..."
             value={searchQuery}
@@ -427,12 +533,9 @@ export default function MenuManagement() {
           />
         </div>
 
-        <div>
-          <label htmlFor="admin-menu-category" className="sr-only">
-            Filter by category
-          </label>
+        <div className="flex flex-wrap items-center gap-2">
           <Select value={filterCategory} onValueChange={setFilterCategory}>
-            <SelectTrigger id="admin-menu-category" className="w-full sm:w-48">
+            <SelectTrigger className="w-40">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
@@ -442,6 +545,17 @@ export default function MenuManagement() {
                   {category}
                 </SelectItem>
               ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={filterStatus} onValueChange={setFilterStatus}>
+            <SelectTrigger className="w-36">
+              <SelectValue placeholder="All Statuses" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="All">All Statuses</SelectItem>
+              <SelectItem value="available">Available</SelectItem>
+              <SelectItem value="sold_out">Sold Out</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -466,8 +580,11 @@ export default function MenuManagement() {
       ) : (
         <DataTable
           columns={columns}
-          data={filteredItems}
-          emptyMessage="No dishes found in the menu yet."
+          data={filteredAndSortedItems}
+          sortColumn={sortColumn}
+          sortDirection={sortDirection}
+          onSort={handleSort}
+          emptyMessage="No dishes found in the menu matching your filters."
         />
       )}
 
