@@ -1,4 +1,5 @@
 import { ArrowDown, ArrowUp, ArrowUpDown, Inbox } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 export default function DataTable({
@@ -8,6 +9,7 @@ export default function DataTable({
   sortColumn,
   sortDirection,
   onSort,
+  isLoading = false,
 }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
@@ -50,7 +52,17 @@ export default function DataTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {data.length === 0 ? (
+            {isLoading ? (
+              Array.from({ length: 5 }).map((_, rIdx) => (
+                <tr key={rIdx}>
+                  {columns.map((_, cIdx) => (
+                    <td key={cIdx} className="px-6 py-4">
+                      <Skeleton className="h-5 w-full rounded-md" />
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : data.length === 0 ? (
               <tr>
                 <td colSpan={columns.length} className="py-12 text-center">
                   <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">
