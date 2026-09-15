@@ -134,7 +134,7 @@ function MenuPage() {
           <div
             role="group"
             aria-label={t("menu.filterByCategory")}
-            className="flex flex-wrap gap-2"
+            className="flex items-center gap-2 overflow-x-auto py-1 px-0.5 custom-scrollbar min-w-0 flex-1 scroll-smooth"
           >
             {visibleCategories.map((cat) => {
               const isActive = category === cat;
@@ -145,10 +145,10 @@ function MenuPage() {
                   onClick={() => selectCategory(cat)}
                   aria-pressed={isActive}
                   className={cn(
-                    "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
+                    "shrink-0 rounded-full px-4 py-1.5 text-xs sm:text-sm font-semibold transition-all shadow-2xs whitespace-nowrap",
                     isActive
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "bg-muted/70 text-muted-foreground hover:bg-accent hover:text-accent-foreground",
                   )}
                 >
                   {cat === "all" ? t("menu.allCategories") : cat}
