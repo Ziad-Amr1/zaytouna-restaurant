@@ -1,56 +1,42 @@
-import { useEffect, useState } from "react";
-import { CheckCircle2, DollarSign, Receipt, RefreshCcw, Users } from "lucide-react";
+import { useCallback } from "react";
+import { CheckCircle2, DollarSign, Receipt, Users } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { getMenuItems } from "@/api/menuApi";
 import { getAllOrders } from "@/api/ordersApi";
+import PageHeader from "@/components/common/PageHeader";
 import StatCard from "@/components/common/StatCard";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import useFetchData from "@/hooks/useFetchData";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
 import { computeAnalytics, computeCategoryStats } from "@/lib/statistics";
 
 export default function Analytics() {
-  const [categoryStats, setCategoryStats] = useState([]);
-  const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const { t } = useTranslation();
 
-  const load = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const [ordersRes, menuRes] = await Promise.all([getAllOrders(), getMenuItems()]);
-      const orders = ordersRes.data || [];
-      const menuItems = menuRes.data || [];
-      setStats(computeAnalytics(orders));
-      setCategoryStats(computeCategoryStats(orders, menuItems));
-    } catch {
-      setError("We couldn't load analytics right now. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    void load();
+  const fetchAnalytics = useCallback(async () => {
+    const [ordersRes, menuRes] = await Promise.all([getAllOrders(), getMenuItems()]);
+    const orders = ordersRes.data || [];
+    const menuItems = menuRes.data || [];
+    return {
+      stats: computeAnalytics(orders),
+      categoryStats: computeCategoryStats(orders, menuItems),
+    };
   }, []);
+
+  const { data, loading, error, refetch } = useFetchData(fetchAnalytics);
+
+  const stats = data?.stats;
+  const categoryStats = data?.categoryStats || [];
 
   return (
     <div className="space-y-8">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">Business Analytics</h2>
-          <p className="text-sm text-muted-foreground">
-            Track performance trends, sales distribution, and customer behavior.
-          </p>
-        </div>
-        {error ? (
-          <Button variant="outline" onClick={() => void load()}>
-            <RefreshCcw className="mr-2 size-4" aria-hidden="true" /> Retry
-          </Button>
-        ) : null}
-      </div>
+      <PageHeader
+        title={t("admin.nav.analytics")}
+        description="Track performance trends, sales distribution, and customer behavior."
+        onRefresh={error ? refetch : undefined}
+      />
 
       {loading ? (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -65,30 +51,30 @@ export default function Analytics() {
         <div className="rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-8 text-center text-sm text-destructive">
           {error}
         </div>
-      ) : (
+      ) : stats ? (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
           <StatCard
-            title="Monthly Revenue"
+            title={t("admin.overview.dailyRevenue")}
             value={formatPrice(stats.monthlyRevenue)}
             icon={DollarSign}
           />
           <StatCard
-            title="Total Completed Orders"
+            title={t("cart.orderPlaced")}
             value={stats.completedOrders}
             icon={CheckCircle2}
           />
           <StatCard
-            title="Average Order Value"
+            title={t("cart.subtotal")}
             value={formatPrice(stats.avgOrderValue)}
             icon={Receipt}
           />
           <StatCard
-            title="Repeat Customer Rate"
+            title={t("admin.overview.activeCustomers")}
             value={`${stats.repeatRate.toFixed(1)}%`}
             icon={Users}
           />
         </div>
-      )}
+      ) : null}
 
       <div className="rounded-2xl border border-border bg-card p-6">
         <div className="mb-4 flex items-center justify-between border-b border-border px-1 pb-4">

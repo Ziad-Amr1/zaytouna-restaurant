@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
-import { RefreshCcw } from "lucide-react";
+import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { getAllOrders, updateOrderStatus } from "@/api/ordersApi";
 import DataTable from "@/components/common/DataTable";
 import EmptyState from "@/components/common/EmptyState";
+import PageHeader from "@/components/common/PageHeader";
 import StatusBadge from "@/components/common/StatusBadge";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import useFetchData from "@/hooks/useFetchData";
 import { formatDateTime, formatPrice } from "@/lib/format";
 
 const ORDER_STATUSES = ["pending", "preparing", "completed", "cancelled"];
@@ -24,71 +25,61 @@ function titleCase(value) {
 }
 
 export default function OrdersManagement() {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const { t } = useTranslation();
   const [updatingId, setUpdatingId] = useState(null);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const response = await getAllOrders();
-      const list = (response.data || []).sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      );
-      setOrders(list);
-    } catch {
-      setError("We couldn't load orders right now. Please try again.");
-      setOrders([]);
-    } finally {
-      setLoading(false);
-    }
+  const fetchOrders = useCallback(async () => {
+    const res = await getAllOrders();
+    return (res.data || []).sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
   }, []);
 
-  useEffect(() => {
-    void load();
-  }, [load]);
+  const { data: orders, setData: setOrders, loading, error, refetch } = useFetchData(
+    fetchOrders,
+    [],
+    []
+  );
 
   const handleStatusChange = async (id, status) => {
     setUpdatingId(id);
     try {
       const response = await updateOrderStatus(id, status);
-      setOrders((prev) => prev.map((o) => (o.id === id ? response.data : o)));
+      setOrders((prev) => (prev || []).map((o) => (o.id === id ? response.data : o)));
       toast.success(`Order ${id} marked as ${status}.`);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Could not update the order status.");
+      toast.error(err.response?.data?.message || t("cart.orderFailed"));
     } finally {
       setUpdatingId(null);
     }
   };
 
   const columns = [
-    { header: "Order ID", accessor: "id" },
-    { header: "Customer ID", accessor: "userId" },
+    { header: t("admin.table.orderId"), accessor: "id" },
+    { header: t("admin.table.customerId"), accessor: "userId" },
     {
-      header: "Items",
+      header: t("admin.table.dishesOrdered"),
       accessor: "items",
       render: (row) =>
         (row.items || []).map((item) => `${item.quantity} × ${item.name}`).join(", "),
     },
     {
-      header: "Total Amount",
+      header: t("admin.table.total"),
       accessor: "total",
       render: (row) => formatPrice(row.total),
     },
     {
-      header: "Date & Time",
+      header: t("admin.table.time"),
       accessor: "createdAt",
       render: (row) => formatDateTime(row.createdAt),
     },
     {
-      header: "Status",
+      header: t("admin.table.status"),
       accessor: "status",
       render: (row) => <StatusBadge status={row.status} />,
     },
     {
-      header: "Actions",
+      header: t("admin.navigationLabel"),
       accessor: "id",
       render: (row) => (
         <Select
@@ -117,21 +108,11 @@ export default function OrdersManagement() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
-            Orders Management
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Track live customer orders, update prep status, and review receipts.
-          </p>
-        </div>
-        {error ? (
-          <Button variant="outline" onClick={() => void load()}>
-            <RefreshCcw className="mr-2 size-4" aria-hidden="true" /> Retry
-          </Button>
-        ) : null}
-      </div>
+      <PageHeader
+        title={t("admin.nav.orders")}
+        description="Track live customer orders, update prep status, and review receipts."
+        onRefresh={error ? refetch : undefined}
+      />
 
       {loading ? (
         <div className="rounded-2xl border border-border bg-card p-6">
@@ -141,24 +122,27 @@ export default function OrdersManagement() {
         </div>
       ) : error ? (
         <EmptyState
-          title="Something went wrong"
+          title={t("common.somethingWentWrong")}
           description={error}
           action={
-            <Button variant="outline" onClick={() => void load()}>
-              Try again
-            </Button>
+            <button
+              onClick={refetch}
+              className="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-muted"
+            >
+              {t("common.retry")}
+            </button>
           }
         />
-      ) : orders.length === 0 ? (
+      ) : !orders || orders.length === 0 ? (
         <EmptyState
-          title="No orders yet"
-          description="Orders placed by customers will appear here."
+          title={t("orders.empty.title")}
+          description={t("orders.empty.description")}
         />
       ) : (
         <DataTable
           columns={columns}
           data={orders}
-          emptyMessage="No customer orders found yet."
+          emptyMessage={t("admin.overview.noOrders")}
         />
       )}
     </div>
