@@ -34,99 +34,131 @@ function MenuCard({ dish }) {
   function handleFavoriteClick(event) {
     event.preventDefault();
     event.stopPropagation();
-    setFavorite(toggleFavorite(dish.id));
+    if (!isAuthenticated) {
+      toast.error(t("auth.loginRequiredToFavorite", "Please sign in to save favorites"));
+      return;
+    }
+    const nextState = toggleFavorite(dish.id);
+    setFavorite(nextState);
+    if (nextState) {
+      toast.success(t("menu.addedToFavorites", { name: dish.name }));
+    } else {
+      toast.info(t("menu.removedFromFavorites", { name: dish.name }));
+    }
   }
 
   function handleAddToCart(event) {
     event.preventDefault();
     event.stopPropagation();
-    addItem(dish);
+    const finalPrice = dish.discountPercent
+      ? Math.round(dish.price * (1 - dish.discountPercent / 100))
+      : dish.price;
+    addItem({ ...dish, price: finalPrice, originalPrice: dish.price });
     toast.success(t("menu.addedToCart", { name: dish.name }));
   }
 
   const soldOut = dish.available === false;
+  const hasDiscount = Boolean(dish.discountPercent && dish.discountPercent > 0);
+  const finalPrice = hasDiscount
+    ? Math.round(dish.price * (1 - dish.discountPercent / 100))
+    : dish.price;
 
   return (
-    /* h-full: fill the grid cell so all cards are equal height */
-    <Card className="group flex h-full flex-col overflow-hidden p-0">
+    <Card className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/80 bg-card p-0 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl">
       <div className="relative">
-        <Link to={`/menu/${dish.id}`} className="block">
-          {/* fixed ratio: identical image boxes for every dish */}
+        <Link to={`/menu/${dish.id}`} className="block overflow-hidden">
           <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
             {dish.image ? (
               <img
                 src={dish.image}
                 alt={dish.name}
                 loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-108"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center px-4 text-center text-sm text-muted-foreground">
+              <div className="flex h-full w-full items-center justify-center bg-muted/60 p-4 text-center text-sm font-medium text-muted-foreground">
                 {dish.name}
               </div>
             )}
 
-            {soldOut && (
-              <Badge variant="secondary" className="absolute start-3 top-3">
-                {t("menu.soldOut")}
-              </Badge>
-            )}
+            <div className="absolute inset-x-0 top-0 flex items-center justify-between p-3 pointer-events-none">
+              <div className="flex flex-col gap-1 items-start pointer-events-auto">
+                {soldOut && (
+                  <Badge variant="secondary" className="bg-destructive/90 text-destructive-foreground backdrop-blur-md">
+                    {t("menu.soldOut")}
+                  </Badge>
+                )}
+                {hasDiscount && !soldOut && (
+                  <Badge className="bg-rose-600 text-white font-bold backdrop-blur-md shadow-xs">
+                    -{dish.discountPercent}% OFF
+                  </Badge>
+                )}
+              </div>
+            </div>
           </div>
         </Link>
 
-        {isAuthenticated && (
-          <button
-            type="button"
-            onClick={handleFavoriteClick}
-            aria-pressed={favorite}
-            aria-label={
-              favorite
-                ? t("menu.removeFavorite", { name: dish.name })
-                : t("menu.addFavorite", { name: dish.name })
-            }
-            className="absolute end-3 top-3 z-10 flex size-9 items-center justify-center rounded-full border border-border bg-background/85 text-foreground shadow-sm backdrop-blur transition-colors hover:text-accent-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-focus-ring)"
-          >
-            <Heart
-              className={cn(
-                "size-4",
-                favorite && "fill-accent-strong text-accent-strong",
-              )}
-              aria-hidden="true"
-            />
-          </button>
-        )}
+        {/* Favorite Heart Button - pointer events enabled, stop propagation */}
+        <button
+          type="button"
+          onClick={handleFavoriteClick}
+          aria-pressed={favorite}
+          aria-label={
+            favorite
+              ? t("menu.removeFavorite", { name: dish.name })
+              : t("menu.addFavorite", { name: dish.name })
+          }
+          className="absolute end-3 top-3 z-20 flex size-9 items-center justify-center rounded-full border border-border/60 bg-background/80 text-foreground shadow-md backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 hover:bg-background"
+        >
+          <Heart
+            className={cn(
+              "size-4.5 transition-colors duration-300",
+              favorite ? "fill-rose-500 text-rose-500" : "text-muted-foreground hover:text-rose-500"
+            )}
+            aria-hidden="true"
+          />
+        </button>
       </div>
 
-      <div className="flex flex-1 flex-col p-4">
-        {/* min-h reserves 2 lines so 1-line titles don't shrink the card */}
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="line-clamp-2 min-h-10 text-lg leading-snug text-foreground">
+      <div className="flex flex-1 flex-col p-4.5">
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="line-clamp-2 min-h-10 text-base font-bold leading-snug text-foreground transition-colors group-hover:text-primary">
             <Link to={`/menu/${dish.id}`}>{dish.name}</Link>
           </h3>
 
-          <span className="shrink-0 pt-0.5 text-sm font-semibold text-foreground">
-            {formatPrice(dish.price)}
-          </span>
+          <div className="shrink-0 text-end">
+            {hasDiscount ? (
+              <div className="flex flex-col items-end">
+                <span className="text-xs text-muted-foreground line-through">
+                  {formatPrice(dish.price)}
+                </span>
+                <span className="text-base font-bold text-rose-600 dark:text-rose-400">
+                  {formatPrice(finalPrice)}
+                </span>
+              </div>
+            ) : (
+              <span className="text-base font-bold text-foreground">
+                {formatPrice(dish.price)}
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* always rendered — empty fallback keeps every card the same height */}
-        <p className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
+        <p className="mt-1 text-[11px] font-semibold uppercase tracking-wider text-accent-strong">
           {dish.category || "\u00A0"}
         </p>
 
-        <p className="mt-2 line-clamp-2 min-h-10 text-sm text-muted-foreground">
+        <p className="mt-2 line-clamp-2 min-h-9 text-xs leading-relaxed text-muted-foreground">
           {dish.description || "\u00A0"}
         </p>
 
-        {/* always rendered; mt-auto pins it to the bottom.
-            sold-out shows a disabled button so the space is identical */}
         <div className="mt-auto pt-4">
           {soldOut ? (
             <Button
               type="button"
               size="sm"
               variant="outline"
-              className="w-full"
+              className="w-full rounded-xl"
               disabled
             >
               {t("menu.soldOut")}
@@ -135,8 +167,7 @@ function MenuCard({ dish }) {
             <Button
               type="button"
               size="sm"
-              variant="outline"
-              className="w-full"
+              className="w-full rounded-xl gap-2 font-semibold shadow-xs"
               onClick={handleAddToCart}
             >
               <ShoppingCart className="size-4" aria-hidden="true" />

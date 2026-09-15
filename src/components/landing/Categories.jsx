@@ -16,25 +16,29 @@ const CATEGORY_CARDS = [
     key: "mainCourse",
     category: "Main Course",
     icon: UtensilsCrossed,
-    gradientClass: "from-(--color-brick-600) to-(--color-olive-950)",
+    imageUrl: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80",
+    gradientClass: "from-amber-700 to-amber-950",
   },
   {
     key: "appetizer",
     category: "Appetizer",
     icon: Leaf,
-    gradientClass: "from-(--color-olive-700) to-(--color-olive-950)",
+    imageUrl: "https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&w=800&q=80",
+    gradientClass: "from-emerald-700 to-emerald-950",
   },
   {
     key: "dessert",
     category: "Dessert",
     icon: Cookie,
-    gradientClass: "from-(--color-brass-700) to-(--color-brick-600)",
+    imageUrl: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80",
+    gradientClass: "from-orange-700 to-red-950",
   },
   {
     key: "beverage",
     category: "Beverage",
     icon: CupSoda,
-    gradientClass: "from-(--color-olive-500) to-(--color-olive-900)",
+    imageUrl: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=800&q=80",
+    gradientClass: "from-teal-700 to-cyan-950",
   },
 ];
 
@@ -42,8 +46,6 @@ function Categories() {
   const { t } = useTranslation();
 
   return (
-    /* no <section>/header here — Landing's SectionHeader owns the title.
-       no mt-16 — the SECTION wrapper owns spacing. */
     <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
       {CATEGORY_CARDS.map((card) => {
         const Icon = card.icon;
@@ -57,6 +59,7 @@ function Categories() {
                 pathname: "/menu",
                 search: `?category=${encodeURIComponent(card.category)}`,
               }}
+              imageUrl={card.imageUrl}
               gradientClass={card.gradientClass}
             />
           </li>
