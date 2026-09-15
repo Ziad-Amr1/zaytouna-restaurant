@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Menu } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -28,8 +27,6 @@ export function NavDrawer({
   className,
 }) {
   const [open, setOpen] = useState(false);
-  const { i18n } = useTranslation();
-  const side = i18n.dir() === "rtl" ? "right" : "left";
 
   function close() {
     setOpen(false);
@@ -48,7 +45,7 @@ export function NavDrawer({
         </Button>
       </SheetTrigger>
 
-      <SheetContent side={side} className="flex w-72 flex-col gap-0 p-4">
+      <SheetContent side="right" className="flex w-72 flex-col gap-0 p-4">
         <SheetHeader className="sr-only">
           <SheetTitle>{title}</SheetTitle>
           {description && <SheetDescription>{description}</SheetDescription>}
