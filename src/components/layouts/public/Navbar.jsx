@@ -1,8 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
-import { LogOut, User } from "lucide-react";
+import { ChevronDown, LogOut, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useAuth from "@/hooks/useAuth";
 import useLogout from "@/hooks/useLogout";
-import { cn } from "@/lib/utils";
+import { cn, getUserAvatar } from "@/lib/utils";
 
 import { Brand } from "../shared/Brand";
 import { navRowClass } from "../shared/NavRowClass";
@@ -93,24 +93,31 @@ function AccountMenu() {
     );
   }
 
+  const avatarUrl = getUserAvatar(user);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          className="flex items-center gap-2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-9 gap-2 rounded-full border-border bg-background/70 px-2.5 shadow-2xs hover:bg-accent transition-all focus-visible:ring-2"
           aria-label={t("nav.accountMenu")}
         >
-          <Avatar>
-            <AvatarFallback>
+          <Avatar className="size-6 shrink-0">
+            {avatarUrl ? (
+              <AvatarImage src={avatarUrl} alt={user?.name} className="object-cover" />
+            ) : null}
+            <AvatarFallback className="text-[10px] font-bold bg-primary text-primary-foreground">
               {user?.name?.[0]?.toUpperCase() || "?"}
             </AvatarFallback>
           </Avatar>
 
-          <span className="text-sm font-medium text-foreground">
+          <span className="max-w-[120px] truncate text-xs font-semibold text-foreground">
             {user?.name}
           </span>
-        </button>
+          <ChevronDown className="size-3 text-muted-foreground opacity-70" />
+        </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-56">
