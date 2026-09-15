@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, Heart, Loader2, Minus, Plus } from "lucide-react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { getMenuItem } from "@/api/menuApi";
@@ -13,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
 
 function DishDetailsPage() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,8 +43,8 @@ function DishDetailsPage() {
         if (!cancelled) {
           setError(
             err.response?.status === 404
-              ? "We couldn't find that dish."
-              : "We couldn't load this dish right now. Please try again."
+              ? t("dishDetails.notFound")
+              : t("dishDetails.loadError")
           );
         }
       } finally {
@@ -55,7 +57,7 @@ function DishDetailsPage() {
     return () => {
       cancelled = true;
     };
-  }, [id, retryKey]);
+  }, [id, retryKey, t]);
 
   const handleBack = () => {
     const from = location.state?.from;
@@ -72,13 +74,16 @@ function DishDetailsPage() {
     setPlacing(true);
     try {
       await createOrder([{ menuItemId: dish.id, quantity }]);
-      toast.success("Order placed", {
-        description: `${quantity} × ${dish.name} is on its way to the kitchen.`,
+      toast.success(t("dishDetails.orderPlaced"), {
+        description: t("dishDetails.orderPlacedDesc", {
+          quantity,
+          name: dish.name,
+        }),
       });
       navigate("/orders");
     } catch (err) {
       toast.error(
-        err.response?.data?.message || "We couldn't place your order right now. Please try again."
+        err.response?.data?.message || t("cart.orderFailed")
       );
     } finally {
       setPlacing(false);
@@ -94,7 +99,7 @@ function DishDetailsPage() {
       )}
     >
       <ChevronLeft className="h-4 w-4 rtl:rotate-180" aria-hidden="true" />
-      Back to menu
+      {t("dishDetails.backToMenu")}
     </button>
   );
 
@@ -103,16 +108,18 @@ function DishDetailsPage() {
   const quantityControl = () => (
     <div className="mt-6">
       <div className="flex items-center gap-3">
-        <span className="text-sm font-medium text-muted-foreground">Quantity</span>
+        <span className="text-sm font-medium text-muted-foreground">
+          {t("dishDetails.quantity")}
+        </span>
         <div className="flex items-center rounded-lg border border-border">
           <Button
             type="button"
             variant="ghost"
             size="icon"
-            className="h-10 w-10 rounded-none rounded-l-lg"
+            className="h-10 w-10 rounded-none rounded-s-lg"
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
             disabled={quantity <= 1 || placing}
-            aria-label="Decrease quantity"
+            aria-label={t("dishDetails.decreaseQuantity")}
           >
             <Minus className="h-4 w-4" aria-hidden="true" />
           </Button>
@@ -123,10 +130,10 @@ function DishDetailsPage() {
             type="button"
             variant="ghost"
             size="icon"
-            className="h-10 w-10 rounded-none rounded-r-lg"
+            className="h-10 w-10 rounded-none rounded-e-lg"
             onClick={() => setQuantity((q) => q + 1)}
             disabled={placing}
-            aria-label="Increase quantity"
+            aria-label={t("dishDetails.increaseQuantity")}
           >
             <Plus className="h-4 w-4" aria-hidden="true" />
           </Button>
@@ -141,10 +148,10 @@ function DishDetailsPage() {
           {placing ? (
             <>
               <Loader2 className="animate-spin" aria-hidden="true" />
-              Placing order…
+              {t("dishDetails.placingOrder")}
             </>
           ) : (
-            "Place order"
+            t("dishDetails.placeOrder")
           )}
         </Button>
       </div>
@@ -153,105 +160,107 @@ function DishDetailsPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-          {loading ? (
-            <div className="grid gap-8 md:grid-cols-2">
-              <Skeleton className="aspect-square w-full rounded-2xl" />
-              <div className="space-y-3">
-                <Skeleton className="h-4 w-24" />
-                <Skeleton className="h-8 w-2/3" />
-                <Skeleton className="h-7 w-20" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-5/6" />
-                <Skeleton className="h-4 w-4/6" />
-              </div>
-            </div>
-          ) : error || !dish ? (
-            <div className="py-16 text-center">
-              <p className="text-2xl font-semibold text-foreground">{error || "Dish not found."}</p>
-              <div className="mt-6 flex flex-col items-center gap-3">
-                {error && (
-                  <Button variant="outline" onClick={() => setRetryKey((k) => k + 1)}>
-                    Try again
-                  </Button>
-                )}
-                {backControl}
-              </div>
-            </div>
-          ) : (
-            <>
-              {backControl}
-
-              <div className="mt-6 grid gap-8 md:grid-cols-2 md:items-start">
-                <div className="aspect-square w-full overflow-hidden rounded-2xl bg-muted">
-                  {dish.image ? (
-                    <img
-                      src={dish.image}
-                      alt={dish.name}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center px-4 text-center text-muted-foreground">
-                      {dish.name}
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  {dish.category && (
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                      {dish.category}
-                    </p>
-                  )}
-
-                  <div className="flex items-start justify-between gap-3">
-                    <h1 className="mt-1 text-3xl font-bold leading-tight text-foreground">
-                      {dish.name}
-                    </h1>
-                    {isAuthenticated && (
-                      <button
-                        type="button"
-                        onClick={() => void toggleFavorite()}
-                        aria-pressed={favored}
-                        aria-label={
-                          favored
-                            ? `Remove ${dish.name} from favorites`
-                            : `Add ${dish.name} to favorites`
-                        }
-                        className="mt-1 flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:text-accent-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-focus-ring)"
-                      >
-                        <Heart
-                          className={cn("size-5", favored && "fill-accent-strong text-accent-strong")}
-                          aria-hidden="true"
-                        />
-                      </button>
-                    )}
-                  </div>
-
-                  <p className="mt-3 text-2xl font-semibold text-foreground">
-                    {formatPrice(dish.price)}
-                  </p>
-
-                  {dish.description && (
-                    <p className="mt-4 leading-relaxed text-muted-foreground">{dish.description}</p>
-                  )}
-
-                  {soldOut ? (
-                    <p className="mt-6 inline-block rounded-full bg-muted px-4 py-2 text-sm font-medium text-muted-foreground">
-                      Currently sold out
-                    </p>
-                  ) : (
-                    <>
-                      <p className="mt-6 inline-block rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
-                        Available tonight
-                      </p>
-                      {quantityControl()}
-                    </>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
+      {loading ? (
+        <div className="grid gap-8 md:grid-cols-2">
+          <Skeleton className="aspect-square w-full rounded-2xl" />
+          <div className="space-y-3">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-8 w-2/3" />
+            <Skeleton className="h-7 w-20" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-4/6" />
+          </div>
         </div>
+      ) : error || !dish ? (
+        <div className="py-16 text-center">
+          <p className="text-2xl font-semibold text-foreground">
+            {error || t("dishDetails.notFound")}
+          </p>
+          <div className="mt-6 flex flex-col items-center gap-3">
+            {error && (
+              <Button variant="outline" onClick={() => setRetryKey((k) => k + 1)}>
+                {t("common.retry")}
+              </Button>
+            )}
+            {backControl}
+          </div>
+        </div>
+      ) : (
+        <>
+          {backControl}
+
+          <div className="mt-6 grid gap-8 md:grid-cols-2 md:items-start">
+            <div className="aspect-square w-full overflow-hidden rounded-2xl bg-muted">
+              {dish.image ? (
+                <img
+                  src={dish.image}
+                  alt={dish.name}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center px-4 text-center text-muted-foreground">
+                  {dish.name}
+                </div>
+              )}
+            </div>
+
+            <div>
+              {dish.category && (
+                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  {dish.category}
+                </p>
+              )}
+
+              <div className="flex items-start justify-between gap-3">
+                <h1 className="mt-1 text-3xl font-bold leading-tight text-foreground">
+                  {dish.name}
+                </h1>
+                {isAuthenticated && (
+                  <button
+                    type="button"
+                    onClick={() => void toggleFavorite()}
+                    aria-pressed={favored}
+                    aria-label={
+                      favored
+                        ? t("menu.removeFavorite", { name: dish.name })
+                        : t("menu.addFavorite", { name: dish.name })
+                    }
+                    className="mt-1 flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:text-accent-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <Heart
+                      className={cn("size-5", favored && "fill-accent-strong text-accent-strong")}
+                      aria-hidden="true"
+                    />
+                  </button>
+                )}
+              </div>
+
+              <p className="mt-3 text-2xl font-semibold text-foreground">
+                {formatPrice(dish.price)}
+              </p>
+
+              {dish.description && (
+                <p className="mt-4 leading-relaxed text-muted-foreground">{dish.description}</p>
+              )}
+
+              {soldOut ? (
+                <p className="mt-6 inline-block rounded-full bg-muted px-4 py-2 text-sm font-medium text-muted-foreground">
+                  {t("dishDetails.soldOut")}
+                </p>
+              ) : (
+                <>
+                  <p className="mt-6 inline-block rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
+                    {t("dishDetails.availableTonight")}
+                  </p>
+                  {quantityControl()}
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
   );
 }
 

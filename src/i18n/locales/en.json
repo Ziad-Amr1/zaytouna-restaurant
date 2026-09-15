@@ -23,6 +23,51 @@
     "themeToDark": "Switch to dark theme",
     "language": "Language"
   },
+  "auth": {
+    "signIn": "Sign in",
+    "welcomeBack": "Welcome back to Zaytouna Restaurant",
+    "createAccount": "Create your account",
+    "joinZaytouna": "Join Zaytouna Restaurant to start ordering",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "name": "Name",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "signingIn": "Signing in…",
+    "creatingAccount": "Creating account…",
+    "createAccountButton": "Create account",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "yourPassword": "Your password",
+    "fullPlaceholder": "Your full name",
+    "passwordLengthHelp": "Must be at least 6 characters.",
+    "repeatPassword": "Repeat your password"
+  },
+  "dishDetails": {
+    "backToMenu": "Back to menu",
+    "quantity": "Quantity",
+    "placeOrder": "Place order",
+    "placingOrder": "Placing order…",
+    "orderPlaced": "Order placed",
+    "orderPlacedDesc": "{{quantity}} × {{name}} is on its way to the kitchen.",
+    "availableTonight": "Available tonight",
+    "soldOut": "Currently sold out",
+    "notFound": "We couldn't find that dish.",
+    "loadError": "We couldn't load this dish right now. Please try again.",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity"
+  },
+  "unauthorized": {
+    "title": "Access denied",
+    "description": "You don't have permission to view this page. If you believe this is a mistake, please contact the restaurant administrator.",
+    "backHome": "Back to homepage"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist or may have been moved.",
+    "backHome": "Back to homepage"
+  },
   "admin": {
     "mobileTitle": "Zaytouna Admin",
     "navigationLabel": "Admin navigation",
@@ -41,6 +86,27 @@
       "reservations": "Reservations",
       "usersRoles": "Users & Roles",
       "analytics": "Analytics"
+    },
+    "overview": {
+      "title": "Restaurant Overview",
+      "subtitle": "Live operational stats for Zaytouna Restaurant.",
+      "dailyRevenue": "Daily Revenue",
+      "todayOrders": "Today's Orders",
+      "tableBookings": "Table Bookings",
+      "activeCustomers": "Active Customers",
+      "recentOrders": "Recent Customer Orders",
+      "noOrders": "No recent customer orders recorded yet.",
+      "loadError": "We couldn't load the dashboard right now. Please try again."
+    },
+    "table": {
+      "orderId": "Order ID",
+      "customerId": "Customer ID",
+      "dishesOrdered": "Dishes Ordered",
+      "total": "Total",
+      "time": "Time",
+      "status": "Status",
+      "itemsCount_one": "{{count}} item",
+      "itemsCount_other": "{{count}} items"
     }
   },
   "menu": {

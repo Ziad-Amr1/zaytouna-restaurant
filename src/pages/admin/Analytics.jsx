@@ -33,7 +33,7 @@ export default function Analytics() {
   };
 
   useEffect(() => {
-    void load(); // eslint-disable-line react-hooks/set-state-in-effect
+    void load();
   }, []);
 
   return (

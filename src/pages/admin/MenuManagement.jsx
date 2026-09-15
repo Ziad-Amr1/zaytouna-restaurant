@@ -272,7 +272,7 @@ export default function MenuManagement() {
   }, []);
 
   useEffect(() => {
-    void load(); // eslint-disable-line react-hooks/set-state-in-effect
+    void load();
   }, [load]);
 
   const categories = [

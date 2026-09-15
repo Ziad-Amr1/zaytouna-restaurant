@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import useCart from "@/hooks/useCart";
+import useTheme from "@/hooks/useTheme";
 import { supportedLanguages, setLanguage } from "@/i18n";
 import { formatItemCount } from "@/lib/cart";
 import { cn } from "@/lib/utils";
@@ -30,7 +31,6 @@ export function CartBadgeButton({ className }) {
   return (
     <Button
       asChild
-      type="button"
       variant="ghost"
       size="icon"
       className={cn("relative", className)}
@@ -55,12 +55,7 @@ export function LanguageSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          aria-label={t("nav.language")}
-        >
+        <Button variant="ghost" size="icon" aria-label={t("nav.language")}>
           <Languages className="size-5" aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>
@@ -88,22 +83,24 @@ export function LanguageSwitcher() {
   );
 }
 
-export function ThemeButton({ theme, toggleTheme }) {
+/** Reads the theme itself — no theme/toggleTheme props to thread through. */
+export function ThemeButton() {
   const { t } = useTranslation();
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <Button
-      type="button"
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      aria-label={
-        theme === "dark"
-          ? t("nav.themeToLight")
-          : t("nav.themeToDark")
-      }
+      aria-label={isDark ? t("nav.themeToLight") : t("nav.themeToDark")}
     >
-      {theme === "dark" ? <Sun /> : <Moon />}
+      {isDark ? (
+        <Sun className="size-5" aria-hidden="true" />
+      ) : (
+        <Moon className="size-5" aria-hidden="true" />
+      )}
     </Button>
   );
 }

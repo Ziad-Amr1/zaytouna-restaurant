@@ -23,6 +23,51 @@
     "themeToDark": "Passer au thème sombre",
     "language": "Langue"
   },
+  "auth": {
+    "signIn": "Se connecter",
+    "welcomeBack": "Bienvenue à nouveau chez Zaytouna Restaurant",
+    "createAccount": "Créer votre compte",
+    "joinZaytouna": "Rejoignez Zaytouna Restaurant pour commander",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "name": "Nom",
+    "dontHaveAccount": "Vous n'avez pas de compte ?",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "signingIn": "Connexion en cours…",
+    "creatingAccount": "Création du compte…",
+    "createAccountButton": "Créer le compte",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "yourPassword": "Votre mot de passe",
+    "fullPlaceholder": "Votre nom complet",
+    "passwordLengthHelp": "Au moins 6 caractères.",
+    "repeatPassword": "Répétez votre mot de passe"
+  },
+  "dishDetails": {
+    "backToMenu": "Retour au menu",
+    "quantity": "Quantité",
+    "placeOrder": "Commander",
+    "placingOrder": "Commande en cours…",
+    "orderPlaced": "Commande effectuée",
+    "orderPlacedDesc": "{{quantity}} × {{name}} est en route vers la cuisine.",
+    "availableTonight": "Disponible ce soir",
+    "soldOut": "Épuisé actuellement",
+    "notFound": "Impossible de trouver ce plat.",
+    "loadError": "Impossible de charger ce plat pour le moment. Réessayez.",
+    "decreaseQuantity": "Diminuer la quantité",
+    "increaseQuantity": "Augmenter la quantité"
+  },
+  "unauthorized": {
+    "title": "Accès refusé",
+    "description": "Vous n'avez pas la permission d'accéder à cette page. Si vous pensez qu'il s'agit d'une erreur, veuillez contacter l'administrateur.",
+    "backHome": "Retour à l'accueil"
+  },
+  "notFound": {
+    "title": "Page non trouvée",
+    "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "backHome": "Retour à l'accueil"
+  },
   "admin": {
     "mobileTitle": "Administration Zaytouna",
     "navigationLabel": "Navigation d'administration",
@@ -41,6 +86,27 @@
       "reservations": "Réservations",
       "usersRoles": "Utilisateurs et rôles",
       "analytics": "Analyses"
+    },
+    "overview": {
+      "title": "Vue d'ensemble du restaurant",
+      "subtitle": "Statistiques opérationnelles en direct pour Zaytouna Restaurant.",
+      "dailyRevenue": "Revenu quotidien",
+      "todayOrders": "Commandes du jour",
+      "tableBookings": "Réservations de tables",
+      "activeCustomers": "Clients actifs",
+      "recentOrders": "Commandes récentes des clients",
+      "noOrders": "Aucune commande récente enregistrée pour le moment.",
+      "loadError": "Impossible de charger le tableau de bord pour le moment. Veuillez réessayer."
+    },
+    "table": {
+      "orderId": "N° de commande",
+      "customerId": "ID Client",
+      "dishesOrdered": "Plats commandés",
+      "total": "Total",
+      "time": "Heure",
+      "status": "Statut",
+      "itemsCount_one": "{{count}} article",
+      "itemsCount_other": "{{count}} articles"
     }
   },
   "menu": {
